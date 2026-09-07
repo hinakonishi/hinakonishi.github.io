@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hinako Nishi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F1EE;
+    --ink:#241C1F; --ink-dim:#8B7A7E;
+    --line:#E6D8D4;
+    --pink:#E23E78; --pink-deep:#C22B62;
+    --blush:#F5DEE3;
+    --maroon:#5C2138; --maroon-deep:#46182A;
+    --disp:'Playfair Display', serif;
+    --mono:'IBM Plex Mono', monospace;
+    --body:'Inter', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background-color:var(--bg);
+    background-image:radial-gradient(circle, rgba(92,33,56,0.10) 1px, transparent 1px);
+    background-size:24px 24px;
+    color:var(--ink);font-family:var(--body);line-height:1.65;font-size:16px;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--blush);color:var(--maroon-deep);}
+
+  .mono-label{font-family:var(--mono);font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--pink-deep);font-weight:500;}
+  .hairline{height:1px;background:var(--line);border:none;}
+
+  header{position:sticky;top:0;z-index:40;background:rgba(247,241,238,0.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+  .nav-inner{max-width:1080px;margin:0 auto;padding:20px 6vw;display:flex;justify-content:space-between;align-items:center;}
+  .logo{font-family:var(--mono);font-weight:600;font-size:0.95rem;letter-spacing:0.02em;text-decoration:none;cursor:pointer;}
+  .nav-inner nav{display:flex;gap:30px;}
+  .nav-inner nav a{font-family:var(--mono);font-size:0.72rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-dim);text-decoration:none;transition:color .2s;cursor:pointer;}
+  .nav-inner nav a:hover{color:var(--pink-deep);}
+  @media (max-width:640px){ .nav-inner nav a:not(.always){display:none;} }
+
+  section{max-width:1080px;margin:0 auto;padding:0 6vw;}
+  .band{padding:90px 0;}
+
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+
+  /* ===== hero ===== */
+  .hero{padding:110px 6vw 60px;max-width:1080px;margin:0 auto;}
+  .hero .eyebrow{margin-bottom:22px;}
+  .hero h1{font-family:var(--disp);font-weight:600;font-size:clamp(2.4rem,6vw,4rem);line-height:1.12;letter-spacing:-0.01em;}
+  .hero h1 em{font-style:italic;font-weight:500;color:var(--maroon);}
+  .hero-lower{display:flex;gap:22px;align-items:flex-start;margin-top:30px;flex-wrap:wrap;}
+  .accent-bar{width:2px;align-self:stretch;background:var(--pink);flex-shrink:0;min-height:60px;}
+  .hero-lower p{max-width:46ch;color:var(--ink-dim);font-size:1.02rem;}
+  .hero-links{margin-top:38px;display:flex;gap:34px;flex-wrap:wrap;}
+  .text-link{font-family:var(--mono);font-size:0.76rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--pink-deep);text-decoration:none;cursor:pointer;border-bottom:1px solid transparent;padding-bottom:3px;transition:border-color .2s;}
+  .text-link:hover{border-color:var(--pink-deep);}
+  .scroll-hint{margin-top:60px;text-align:right;font-family:var(--mono);font-size:0.72rem;color:var(--ink-dim);letter-spacing:0.06em;text-transform:uppercase;}
+
+  /* ===== section head ===== */
+  .s-head{margin:0 0 46px;}
+  .s-head .eyebrow{margin-bottom:14px;}
+  .s-head h2{font-family:var(--disp);font-weight:600;font-size:clamp(1.9rem,4vw,2.6rem);letter-spacing:-0.01em;}
+  .s-head h2 em{font-style:italic;font-weight:500;color:var(--maroon);}
+
+  /* ===== about + stats ===== */
+  .about-text p{color:var(--ink-dim);max-width:64ch;font-size:1.05rem;}
+  .stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:44px;}
+  @media (max-width:640px){ .stat-strip{grid-template-columns:repeat(2,1fr);} }
+  .stat-strip div{background:var(--bg);padding:22px 20px;}
+  .stat-strip .num{font-family:var(--disp);font-size:1.8rem;font-weight:600;color:var(--maroon);}
+  .stat-strip .lbl{font-family:var(--mono);font-size:0.68rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-dim);margin-top:6px;}
+
+  /* ===== projects grid ===== */
+  .proj-grid{display:grid;grid-template-columns:1fr;gap:22px;}
+  .pcard{background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden;cursor:pointer;transition:transform .3s ease, box-shadow .3s ease;}
+  .pcard:hover{transform:translateY(-4px);box-shadow:0 16px 30px rgba(92,33,56,0.12);}
+  .pcard-media{aspect-ratio:21/9;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:26px 30px;color:#fff;}
+  @media (max-width:640px){ .pcard-media{aspect-ratio:4/3;} }
+  .pcard-media.maroon{background:linear-gradient(160deg, var(--maroon) 0%, var(--maroon-deep) 100%);}
+  .pcard-media.blush{background:var(--blush);color:var(--maroon-deep);}
+  .pcard-media.blush::before{
+    content:'';position:absolute;inset:0;
+    background-image:repeating-linear-gradient(45deg, rgba(92,33,56,0.06) 0 2px, transparent 2px 14px);
+  }
+  .pcard-media.photo{background:#EDE7E4;color:var(--ink);}
+  .pcard-num{position:absolute;top:20px;left:22px;font-family:var(--mono);font-size:0.72rem;letter-spacing:0.05em;opacity:0.85;}
+  .pcard-year{position:absolute;top:20px;right:22px;font-family:var(--mono);font-size:0.72rem;letter-spacing:0.05em;opacity:0.85;}
+  .pcard-title{position:relative;z-index:1;font-family:var(--disp);font-weight:600;font-size:1.5rem;line-height:1.15;}
+  .pcard-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;opacity:0.35;}
+  .pcard-ph svg{width:30px;height:30px;}
+  .pcard-ph span{font-family:var(--mono);font-size:0.66rem;letter-spacing:0.04em;text-align:center;padding:0 20px;}
+  .pcard-body{padding:22px 24px 24px;}
+  .pcard-body .p-org{font-family:var(--mono);font-size:0.7rem;color:var(--ink-dim);letter-spacing:0.04em;text-transform:uppercase;}
+  .pcard-body p.desc{margin-top:12px;color:var(--ink-dim);font-size:0.94rem;}
+  .mini-specs{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px;padding-top:16px;border-top:1px solid var(--line);}
+  .mini-specs div{font-size:0.82rem;}
+  .mini-specs .lbl{font-family:var(--mono);font-size:0.64rem;color:var(--pink-deep);letter-spacing:0.05em;text-transform:uppercase;display:block;margin-bottom:3px;}
+  .view-link{margin-top:18px;display:inline-block;}
+
+  /* ===== detail views ===== */
+  .view{display:none;}
+  .view.active{display:block;}
+  #home.active{display:block;}
+  .back-link{display:inline-flex;align-items:center;gap:6px;margin-bottom:28px;cursor:pointer;}
+  .detail-hero{padding:80px 6vw 0;max-width:1080px;margin:0 auto;}
+  .detail-hero h1{font-family:var(--disp);font-weight:600;font-size:clamp(2rem,5vw,3.2rem);letter-spacing:-0.01em;line-height:1.12;margin-top:16px;}
+  .detail-hero .lede{margin-top:18px;max-width:56ch;color:var(--ink-dim);font-size:1.05rem;}
+  .hero-photo{aspect-ratio:16/8;border-radius:6px;overflow:hidden;background:var(--blush);position:relative;margin-top:40px;}
+  .hero-photo .placeholder svg{width:44px;height:44px;}
+  .hero-photo .placeholder span{font-family:var(--mono);font-size:0.76rem;}
+  .placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--maroon-deep);opacity:0.5;}
+
+  .timeline{display:flex;flex-direction:column;max-width:740px;}
+  .t-step{display:grid;grid-template-columns:22px 1fr;gap:24px;padding-bottom:42px;}
+  .t-step:last-child{padding-bottom:0;}
+  .t-dot-col{display:flex;flex-direction:column;align-items:center;}
+  .t-dot{width:10px;height:10px;border-radius:50%;background:var(--pink);flex-shrink:0;margin-top:6px;}
+  .t-line{flex:1;width:1px;background:var(--line);margin-top:6px;}
+  .t-content .t-stage{font-family:var(--mono);font-size:0.7rem;color:var(--pink-deep);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;}
+  .t-content h4{font-family:var(--disp);font-weight:600;font-size:1.18rem;}
+  .t-content p{color:var(--ink-dim);font-size:0.96rem;margin-top:9px;max-width:60ch;}
+
+  .stat-row{display:flex;flex-wrap:wrap;gap:12px 22px;margin-top:10px;}
+  .stat-chip{background:#fff;border:1px solid var(--line);border-radius:100px;padding:9px 16px;font-size:0.78rem;color:var(--ink-dim);font-family:var(--mono);}
+  .stat-chip b{color:var(--pink-deep);}
+
+  .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:700px){ .gallery-grid{grid-template-columns:1fr 1fr;} }
+  .gallery-item{aspect-ratio:1/1;border-radius:6px;background:var(--blush);position:relative;overflow:hidden;}
+  .gallery-item .placeholder svg{width:22px;height:22px;}
+
+  .next-project{display:flex;justify-content:space-between;align-items:center;padding:28px 30px;background:#fff;border:1px solid var(--line);border-radius:6px;cursor:pointer;transition:transform .2s ease;}
+  .next-project:hover{transform:translateY(-3px);}
+  .next-project .label{font-family:var(--mono);font-size:0.7rem;color:var(--pink-deep);text-transform:uppercase;letter-spacing:0.05em;}
+  .next-project h4{font-family:var(--disp);font-weight:600;font-size:1.2rem;margin-top:6px;}
+  .next-project .arrow{font-size:1.4rem;color:var(--pink);}
+
+  /* ===== pink contact block ===== */
+  .contact-block{background:var(--pink);color:#fff;padding:100px 6vw;margin-top:0;position:relative;overflow:hidden;}
+  .contact-inner{max-width:1080px;margin:0 auto;position:relative;z-index:1;}
+  .contact-block .eyebrow{color:rgba(255,255,255,0.75);}
+  .contact-block h2{font-family:var(--disp);font-weight:600;font-size:clamp(2.1rem,5vw,3.2rem);line-height:1.12;margin-top:16px;}
+  .contact-block h2 em{font-style:italic;font-weight:500;}
+  .contact-links{margin-top:32px;display:flex;gap:30px;flex-wrap:wrap;align-items:center;}
+  .contact-links a{font-family:var(--mono);font-size:0.85rem;letter-spacing:0.03em;text-decoration:none;color:#fff;border-bottom:1px solid rgba(255,255,255,0.5);padding-bottom:3px;}
+  .contact-links a:hover{border-color:#fff;}
+  .deco-ring{position:absolute;border:1px solid rgba(255,255,255,0.25);border-radius:50%;}
+  .deco-ring.r1{width:280px;height:280px;top:-90px;right:-60px;}
+  .deco-ring.r2{width:140px;height:140px;top:60px;right:120px;}
+
+  .credit-bar{padding:26px 6vw;display:flex;justify-content:space-between;align-items:center;max-width:1080px;margin:0 auto;font-family:var(--mono);font-size:0.7rem;color:var(--ink-dim);flex-wrap:wrap;gap:10px;}
+  .credit-bar .initials{font-weight:600;color:var(--ink);}
+
+  /* ===== resume modal ===== */
+  .modal-overlay{position:fixed;inset:0;background:rgba(36,28,31,0.55);z-index:100;display:none;align-items:center;justify-content:center;padding:26px;}
+  .modal-overlay.open{display:flex;}
+  .modal-card{background:#fff;border-radius:12px;max-width:640px;width:100%;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--line);}
+  .modal-head h3{font-family:var(--disp);font-weight:600;font-size:1.15rem;}
+  .modal-close{background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--ink-dim);line-height:1;padding:4px 8px;}
+  .modal-close:hover{color:var(--pink-deep);}
+  .modal-body{flex:1;background:var(--blush);}
+  .modal-body iframe{width:100%;height:100%;border:none;min-height:60vh;}
+  .modal-foot{display:flex;gap:14px;padding:16px 22px;border-top:1px solid var(--line);}
+  .modal-foot a{font-family:var(--mono);font-size:0.76rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--pink-deep);text-decoration:none;border-bottom:1px solid var(--pink-deep);padding-bottom:2px;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .reveal{opacity:1;transform:none;transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <a class="logo" onclick="showView('home')">HN.</a>
+    <nav>
+      <a onclick="showView('home','about')">About</a>
+      <a onclick="showView('home','projects')">Work</a>
+      <a onclick="openResumeModal()">Resume</a>
+      <a onclick="showView('home','contact')" class="always">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HOME ============ -->
+<div id="home" class="view active">
+
+  <section class="hero">
+    <div class="mono-label eyebrow">Mechanical Engineer · Builder · University of Michigan</div>
+    <h1>Hinako Nishi</h1>
+    <div class="hero-links" style="margin-top:34px;">
+      <a class="text-link" onclick="showView('home','projects')">See selected work ↓</a>
+      <a class="text-link" onclick="openResumeModal()">View resume ↗</a>
+    </div>
+    <div class="scroll-hint">Scroll to inspect ↘</div>
+  </section>
+
+  <section class="band" id="about">
+    <div class="s-head reveal"><div class="mono-label eyebrow">About Me</div></div>
+    <div class="about-text reveal">
+      <p>I'm a rising sophomore studying Mechanical Engineering at the University of Michigan. I learn best by building, six hovercraft prototypes, four gripper revisions, and a robot rebuilt every six weeks for two seasons of FIRST Robotics.</p>
+    </div>
+  </section>
+
+  <section class="band" id="projects" style="padding-top:20px;">
+    <div class="s-head reveal"><div class="mono-label eyebrow">Selected Work / 2023–26</div><h2>Built, tested, <em>rebuilt</em>.</h2></div>
+    <div class="proj-grid">
+
+      <div class="pcard reveal" onclick="showView('hovercraft')">
+        <div class="pcard-media maroon">
+          <span class="pcard-num">01 — Hardware / Field Robotics</span>
+          <span class="pcard-year">2026</span>
+          <div class="pcard-title">Amphibious Inspection Hovercraft</div>
+        </div>
+        <div class="pcard-body">
+          <div class="p-org">Japan Infra Waymark</div>
+          <p class="desc">A hand-built inspection craft that trades a fixed hull for one that actually clears the terrain it's sent into.</p>
+          <a class="text-link view-link" style="margin-top:18px;">View project →</a>
+        </div>
+      </div>
+
+      <div class="pcard reveal" onclick="showView('rov')">
+        <div class="pcard-media blush">
+          <span class="pcard-num" style="opacity:0.7;">02 — Marine / Systems Testing</span>
+          <span class="pcard-year" style="opacity:0.7;">2025</span>
+          <div class="pcard-title">Underwater ROV<br>Design Project</div>
+        </div>
+        <div class="pcard-body">
+          <div class="p-org">University of Michigan</div>
+          <p class="desc">A remotely operated vehicle designed to a real lake-current spec, not just a classroom one.</p>
+          <a class="text-link view-link" style="margin-top:18px;">View project →</a>
+        </div>
+      </div>
+
+      <div class="pcard full reveal" onclick="showView('gripper')">
+        <div class="pcard-media photo">
+          <div class="pcard-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l2-3h4l2 3"/><circle cx="12" cy="13.5" r="3.2"/></svg><span>Add gripper photo</span></div>
+          <span class="pcard-num" style="color:var(--ink-dim);">03 — Robotics / Precision Mechanisms</span>
+          <span class="pcard-year" style="color:var(--ink-dim);">2024</span>
+          <div class="pcard-title" style="color:var(--ink);">Robotic Garment-Handling Gripper</div>
+        </div>
+        <div class="pcard-body">
+          <div class="p-org">Centre for Transformative Garment Production, Hong Kong</div>
+          <p class="desc">Four hardware revisions chasing a smaller, steadier 2-finger gripper for garment detection.</p>
+          <a class="text-link view-link" style="margin-top:18px;">View project →</a>
+        </div>
+      </div>
+
+      <div class="pcard full reveal" onclick="showView('first')">
+        <div class="pcard-media photo">
+          <div class="pcard-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l2-3h4l2 3"/><circle cx="12" cy="13.5" r="3.2"/></svg><span>Add team photo</span></div>
+          <span class="pcard-num" style="color:var(--ink-dim);">04 — Robotics / Team Leadership</span>
+          <span class="pcard-year" style="color:var(--ink-dim);">2023–25</span>
+          <div class="pcard-title" style="color:var(--ink);">FIRST Robotics Team 9421</div>
+        </div>
+        <div class="pcard-body">
+          <div class="p-org">Drive Team Captain / Engineering Team</div>
+          <p class="desc">Two build seasons, one Drive Team Captain role, and a run to the FIRST World Championship.</p>
+          <a class="text-link view-link" style="margin-top:18px;">View project →</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="contact-block" id="contact">
+    <div class="deco-ring r1"></div><div class="deco-ring r2"></div>
+    <div class="contact-inner">
+      <div class="mono-label eyebrow">Have a good problem?</div>
+      <h2>Let's <em>build</em> it.</h2>
+      <p style="margin-top:16px;max-width:50ch;color:rgba(255,255,255,0.85);">Always happy to talk about hardware, projects, or opportunities.</p>
+      <div class="contact-links">
+        <a href="mailto:hinako@umich.edu">hinako@umich.edu</a>
+        <a href="tel:+17348194957">(734) 819-4957</a>
+        <a href="https://www.linkedin.com/in/hinakonishi/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+  </div>
+  <div class="credit-bar"><span class="initials">HN.</span><span>© 2026 Hinako Nishi</span></div>
+
+</div>
+
+<!-- ============ HOVERCRAFT DETAIL ============ -->
+<div id="view-hovercraft" class="view">
+  <section class="detail-hero">
+    <span class="text-link back-link" onclick="showView('home','projects')">← Back to work</span>
+    <div class="mono-label">Japan Infra Waymark · Mechanical Engineering Intern · Jun – Aug 2026</div>
+    <h1>Amphibious Inspection Hovercraft</h1>
+    <p class="lede">A hand-built inspection craft designed to cross grass, gravel, water, and gentle slopes to reach bridge infrastructure a wheeled robot can't.</p>
+    <div class="hero-photo"><div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l2-3h4l2 3"/><circle cx="12" cy="13.5" r="3.2"/></svg><span>Add a hero photo of the finished hovercraft</span></div></div>
+  </section>
+
+  <section class="band">
+    <div class="s-head reveal"><div class="mono-label eyebrow">Process</div><h2>How it came together</h2></div>
+    <div class="timeline">
+      <div class="t-step reveal"><div class="t-dot-col"><div class="t-dot"></div><div class="t-line"></div></div>
+        <div class="t-content"><div class="t-stage">Iteration</div><h4>Six prototypes, one hull</h4>
+        <p>Built and rebuilt the craft across 6+ prototype iterations, working the hull down from 75 cm to a final 65 cm footprint while keeping it able to lift a 3.5 kg payload.</p></div></div>
+      <div class="t-step reveal"><div class="t-dot-col"><div class="t-dot"></div><div class="t-line"></div></div>
+        <div class="t-content"><div class="t-stage">Design &amp; Fabrication</div><h4>CAD, printing, and integration</h4>
+        <p>CAD-modeled and FDM 3D-printed 10+ core components in SolidWorks, then integrated a flight controller, GPS, antennas, and 5 ESCs into a custom-printed enclosure driving 5 motors off a single shared 4S battery, cutting overall weight by 30%.</p></div></div>
+      <div class="t-step reveal"><div class="t-dot-col"><div class="t-dot"></div><div class="t-line"></div></div>
+        <div class="t-content"><div class="t-stage">Diagnosis</div><h4>Tracing a lift shortfall to its source</h4>
+        <p>When the craft wasn't lifting as expected, sized the system from first principles (about 164 Pa cushion pressure, 500 CFM airflow, 120 W lift power) and ran root-cause analysis comparing the target against the real hardware. Found the fan was propeller-limited and re-specced from a 7 in to a 5 in prop, bringing the craft to 50% throttle at hover.</p></div></div>
+      <div class="t-step reveal"><div class="t-dot-col"><div class="t-dot"></div></div>
+        <div class="t-content"><div class="t-stage">Manufacturing</div><h4>Skirt design and cost planning</h4>
+        <p>Engineered a sewn ripstop-nylon skirt with 36 pleats and 16 one-way drains for surface clearance, and authored an 18-line manufacturing BOM (~¥309K) to assess unit cost and reproducibility.</p></div></div>
+    </div>
+    <div class="stat-row" style="margin-top:20px;">
+      <div class="stat-chip"><b>65 cm</b> craft length</div>
+      <div class="stat-chip"><b>3.5 kg</b> payload</div>
+      <div class="stat-chip"><b>164 Pa</b> cushion pressure</div>
+      <div class="stat-chip"><b>500 CFM</b> airflow</div>
+      <div class="stat-chip"><b>120 W</b> lift power</div>
+      <div class="stat-chip"><b>30%</b> weight cut</div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0;">
+    <div class="s-head reveal"><div class="mono-label eyebrow">Gallery</div><h2>Build photos</h2></div>
+    <div class="gallery-grid reveal">
+      <div class="gallery-item"><div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.2"/></svg></div></div>
+      <div class="gallery-item"><div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.2"/></svg></div></div>
+      <div class="gallery-item"><div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.2"/></svg></div></div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0;">
+    <div class="next-project" onclick="showView('rov')"><div><div class="label">Next project</div><h4>Underwater ROV Design Project</h4></div><div class="arrow">→</div></div>
+  </section>
+
+  <div class="contact-block">
+    <div class="deco-ring r1"></div><div class="deco-ring r2"></div>
+    <div class="contact-inner">
+      <div class="mono-label eyebrow">Have a good problem?</div>
+      <h2>Let's <em>build</em> it.</h2>
+      <p style="margin-top:16px;max-width:50ch;color:rgba(255,255,255,0.85);">Always happy to talk about hardware, projects, or opportunities.</p>
+      <div class="contact-links">
+        <a href="mailto:hinako@umich.edu">hinako@umich.edu</a>
+        <a href="tel:+17348194957">(734) 819-4957</a>
+        <a href="https://www.linkedin.com/in/hinakonishi/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+  </div>
+  <div class="credit-bar"><span class="initials">HN.</span><span>© 2026 Hinako Nishi</span></div>
+</div>
+
+<!-- ============ ROV DETAIL ============ -->
+<div id="view-rov" class="view">
+  <section class="detail-hero">
+    <span class="text-link back-link" onclick="showView('home','projects')">← Back to work</span>
+    <div class="mono-label">University of Michigan · Testing Lead · Aug – Dec 2025</div>
+    <h1>Underwater ROV Design Project</h1>
+    <p class="lede">A remotely operated underwater vehicle designed, built, and tested against a real lake-current performance requirement.</p>
+    <div class="hero-photo"><div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l2-3h4l2 3"/><circle cx="12" cy="13.5" r="3.2"/></svg><span>Add a hero photo of the ROV</span></div></div>
+  </section>
+
+  <section class="band">
+    <div class="s-head reveal"><div class="mono-label eyebrow">Process</div><h2>How it came together</h2></div>
+    <div class="timeline">
+      <div class="t-step reveal"><div class="t-dot-col"><div class="t-dot"></div><div class="t-line"></div></div>
+        <div class="t-content"><div class="t-stage">Concept</div><h4>A pentagonal-prism frame</h4>
+        <p>Originated the ROV's pentagonal-prism frame concept in Onshape, a packaging decision that wrapped tightly around the stacked electronics and battery canisters, cut wasted internal volume, and helped keep total build cost to $256.</p></div></div>
+      <div class="t-step reveal"><div class="t-dot-col"><div class="t-dot"></div><div class="t-line"></div></div>
+        <div class="t-content"><div class="t-stage">Testing</div><h4>Load-cell thruster testing</h4>
+        <p>Led thruster force testing in the Gorguze Family Lab using a calibrated load cell and a 3:1 lever arm, measuring forward and reverse thrust across all 4 thrusters and pairing them by matched output (4.38 N and 4.25 N for surge, 1.94 N each for heave) to minimize unwanted yaw and pitch.</p></div></div>
+      <div class="t-step reveal"><div class="t-dot-col"><div class="t-dot"></div></div>
+        <div class="t-content"><div class="t-stage">Validation</div><h4>Stability trials and scaling</h4>
+        <p>Ran hydrostatic stability validation and Marine Hydrodynamics Lab surge and heave trials, tuning the buoyancy-ballast system for self-righting stability, then applied dimensional scaling to project full-scale performance against the 2.17 m/s lake-current requirement.</p></div></div>
+    </div>
+    <div class="stat-row" style="margin-top:20px;">
+      <div class="stat-chip"><b>$256</b> total build cost</div>
+      <div class="stat-chip"><b>4.38 N</b> surge thrust</div>
+      <div class="stat-chip"><b>1.94 N</b> heave thrust (each)</div>
+      <div class="stat-chip"><b>2.17 m/s</b> current spec</div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0;">
+    <div class="s-head reveal"><div class="mono-label eyebrow">Gallery</div><h2>Build photos</h2></div>
+    <div class="gallery-grid reveal">
+      <div class="gallery-item"><div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.2"/></svg></div></div>
+      <div class="gallery-item"><div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.2"/></svg></div></div>
+      <div class="gallery-item"><div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.2"/></svg></div></div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0;">
+    <div class="next-project" onclick="showView('gripper')"><div><div class="label">Next project</div><h4>Robotic Garment-Handling Gripper</h4></div><div class="arrow">→</div></div>
+  </section>
+
+  <div class="contact-block">
+    <div class="deco-ring r1"></div><div class="deco-ring r2"></div>
+    <div class="contact-inner">
+      <div class="mono-label eyebrow">Have a good problem?</div>
+      <h2>Let's <em>build</em> it.</h2>
+      <p style="margin-top:16px;max-width:50ch;color:rgba(255,255,255,0.85);">Always happy to talk about hardware, projects, or opportunities.</p>
+      <div class="contact-links">
+        <a href="mailto:hinako@umich.edu">hinako@umich.edu</a>
+        <a href="tel:+17348194957">(734) 819-4957</a>
+        <a href="https://www.linkedin.com/in/hinakonishi/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+  </div>
+  <div class="credit-bar"><span class="initials">HN.</span><span>© 2026 Hinako Nishi</span></div>
+</div>
+
+<!-- ============ GRIPPER DETAIL ============ -->
+<div id="view-gripper" class="view">
+  <section class="detail-hero">
+    <span class="text-link back-link" onclick="showView('home','projects')">← Back to work</span>
+    <div class="mono-label">Centre for Transformative Garment Production · Research Intern · Hong Kong · Jul – Aug 2024</div>
+    <h1>Robotic Garment-Handling Gripper</h1>
+    <p class="lede">A 2-finger robotic gripper designed for precise garment handling and detection, refined across four hardware revisions.</p>
+    <div class="hero-photo"><div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l2-3h4l2 3"/><circle cx="12" cy="13.5" r="3.2"/></svg><span>Add a hero photo of the gripper</span></div></div>
+  </section>
+
+  <section class="band">
+    <div class="s-head reveal"><div class="mono-label eyebrow">Process</div><h2>How it came together</h2></div>
+    <div class="timeline">
+      <div class="t-step reveal"><div class="t-dot-col"><div class="t-dot"></div><div class="t-line"></div></div>
+        <div class="t-content"><div class="t-stage">Iteration</div><h4>Four prototypes, one goal</h4>
+        <p>Engineered 4 iterative prototypes of a 2-finger robotic gripper using SolidWorks and 3D printing, working toward a 40% size reduction and better camera visibility for garment detection with each pass.</p></div></div>
+      <div class="t-step reveal"><div class="t-dot-col"><div class="t-dot"></div><div class="t-line"></div></div>
+        <div class="t-content"><div class="t-stage">Precision</div><h4>Ball screws over lead screws</h4>
+        <p>Enhanced mechanical precision by replacing lead screws with ball screws and optimizing the timing-belt-driven systems, resulting in 30% smoother finger motion and improved axis alignment across versions.</p></div></div>
+      <div class="t-step reveal"><div class="t-dot-col"><div class="t-dot"></div></div>
+        <div class="t-content"><div class="t-stage">Research</div><h4>Benchmarking against the field</h4>
+        <p>Conducted a comparative study of 6+ robotic end-effector designs from academic papers and industrial applications, and synthesized the key design trade-offs to present to the lab.</p></div></div>
+    </div>
+    <div class="stat-row" style="margin-top:20px;">
+      <div class="stat-chip"><b>4</b> prototypes</div>
+      <div class="stat-chip"><b>40%</b> size reduction</div>
+      <div class="stat-chip"><b>30%</b> smoother motion</div>
+      <div class="stat-chip"><b>6+</b> designs benchmarked</div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0;">
+    <div class="s-head reveal"><div class="mono-label eyebrow">Gallery</div><h2>Build photos</h2></div>
+    <div class="gallery-grid reveal">
+      <div class="gallery-item"><div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.2"/></svg></div></div>
+      <div class="gallery-item"><div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.2"/></svg></div></div>
+      <div class="gallery-item"><div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.2"/></svg></div></div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0;">
+    <div class="next-project" onclick="showView('first')"><div><div class="label">Next project</div><h4>FIRST Robotics Team 9421</h4></div><div class="arrow">→</div></div>
+  </section>
+
+  <div class="contact-block">
+    <div class="deco-ring r1"></div><div class="deco-ring r2"></div>
+    <div class="contact-inner">
+      <div class="mono-label eyebrow">Have a good problem?</div>
+      <h2>Let's <em>build</em> it.</h2>
+      <p style="margin-top:16px;max-width:50ch;color:rgba(255,255,255,0.85);">Always happy to talk about hardware, projects, or opportunities.</p>
+      <div class="contact-links">
+        <a href="mailto:hinako@umich.edu">hinako@umich.edu</a>
+        <a href="tel:+17348194957">(734) 819-4957</a>
+        <a href="https://www.linkedin.com/in/hinakonishi/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+  </div>
+  <div class="credit-bar"><span class="initials">HN.</span><span>© 2026 Hinako Nishi</span></div>
+</div>
+
+<!-- ============ FIRST ROBOTICS DETAIL ============ -->
+<div id="view-first" class="view">
+  <section class="detail-hero">
+    <span class="text-link back-link" onclick="showView('home','projects')">← Back to work</span>
+    <div class="mono-label">Drive Team Captain / Engineering Team · Aug 2023 – May 2025</div>
+    <h1>FIRST Robotics Team 9421</h1>
+    <p class="lede">Two seasons of building a competition robot from scratch in six weeks, then leading it through the regional season and the FIRST World Championship.</p>
+    <div class="hero-photo"><div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l2-3h4l2 3"/><circle cx="12" cy="13.5" r="3.2"/></svg><span>Add a team or robot photo</span></div></div>
+  </section>
+
+  <section class="band">
+    <div class="s-head reveal"><div class="mono-label eyebrow">Process</div><h2>How the season ran</h2></div>
+    <div class="timeline">
+      <div class="t-step reveal"><div class="t-dot-col"><div class="t-dot"></div><div class="t-line"></div></div>
+        <div class="t-content"><div class="t-stage">Build Season</div><h4>Six weeks, fifteen engineers</h4>
+        <p>Led a 15-member engineering team in designing and building a competition robot within a six-week build season, coordinating design, fabrication, and testing under a hard deadline.</p></div></div>
+      <div class="t-step reveal"><div class="t-dot-col"><div class="t-dot"></div></div>
+        <div class="t-content"><div class="t-stage">Competition</div><h4>Drive Team Captain</h4>
+        <p>Served as Drive Team Captain, coordinating match strategy and pit operations through regional competitions and on to the 2024 FIRST World Championship.</p></div></div>
+    </div>
+    <div class="stat-row" style="margin-top:20px;">
+      <div class="stat-chip"><b>15</b> members led</div>
+      <div class="stat-chip"><b>6 weeks</b> build season</div>
+      <div class="stat-chip">2024 FIRST World Championship</div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0;">
+    <div class="s-head reveal"><div class="mono-label eyebrow">Gallery</div><h2>Season photos</h2></div>
+    <div class="gallery-grid reveal">
+      <div class="gallery-item"><div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.2"/></svg></div></div>
+      <div class="gallery-item"><div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.2"/></svg></div></div>
+      <div class="gallery-item"><div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.2"/></svg></div></div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0;">
+    <div class="next-project" onclick="showView('hovercraft')"><div><div class="label">Next project</div><h4>Amphibious Inspection Hovercraft</h4></div><div class="arrow">→</div></div>
+  </section>
+
+  <div class="contact-block">
+    <div class="deco-ring r1"></div><div class="deco-ring r2"></div>
+    <div class="contact-inner">
+      <div class="mono-label eyebrow">Have a good problem?</div>
+      <h2>Let's <em>build</em> it.</h2>
+      <p style="margin-top:16px;max-width:50ch;color:rgba(255,255,255,0.85);">Always happy to talk about hardware, projects, or opportunities.</p>
+      <div class="contact-links">
+        <a href="mailto:hinako@umich.edu">hinako@umich.edu</a>
+        <a href="tel:+17348194957">(734) 819-4957</a>
+        <a href="https://www.linkedin.com/in/hinakonishi/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+  </div>
+  <div class="credit-bar"><span class="initials">HN.</span><span>© 2026 Hinako Nishi</span></div>
+</div>
+
+<!-- ============ RESUME MODAL ============ -->
+<div class="modal-overlay" id="resumeModal" onclick="if(event.target===this)closeResumeModal()">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>Resume</h3>
+      <button class="modal-close" onclick="closeResumeModal()">×</button>
+    </div>
+    <div class="modal-body"><iframe src="resume.pdf" title="Hinako Nishi Resume"></iframe></div>
+    <div class="modal-foot">
+      <a href="resume.pdf" target="_blank" rel="noopener">Open in new tab</a>
+      <a href="resume.pdf" download>Download PDF</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showView(id, anchor){
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    var target = id === 'home' ? document.getElementById('home') : document.getElementById('view-' + id);
+    target.classList.add('active');
+    window.scrollTo(0,0);
+    if(id === 'home' && anchor){
+      setTimeout(function(){
+        var el = document.getElementById(anchor);
+        if(el) el.scrollIntoView({behavior:'smooth'});
+      }, 30);
+    }
+    setTimeout(initReveal, 50);
+  }
+
+  function initReveal(){
+    var els = document.querySelectorAll('.reveal:not(.in)');
+    if(!('IntersectionObserver' in window)){ els.forEach(e=>e.classList.add('in')); return; }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){ entry.target.classList.add('in'); io.unobserve(entry.target); }
+      });
+    }, {threshold:0.12});
+    els.forEach(function(el){ io.observe(el); });
+  }
+  initReveal();
+
+  function openResumeModal(){
+    document.getElementById('resumeModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeResumeModal(){
+    document.getElementById('resumeModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeResumeModal();
+  });
+</script>
+
+</body>
+</html>
