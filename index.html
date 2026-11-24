@@ -188,6 +188,7 @@ h1, h2, h3 { text-wrap: balance; }
 .p-hero .lede { margin: 28px auto 0; max-width: 52ch; font-size: clamp(18px, 1.5vw, 21px); color: var(--ink-2); }
 .back { display: inline-block; margin-bottom: 24px; font-size: 15px; font-weight: 500; }
 .p-media img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--r); background: var(--char-2); }
+.p-media.small img { display: block; max-width: 760px; margin-inline: auto; aspect-ratio: 4 / 3; }
 .meta { margin: 0; padding-block: 24px 112px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; font-size: 15px; }
 .meta > div { border-top: 1px solid var(--line); padding-top: 16px; }
 .meta dt { color: var(--muted); }
@@ -550,7 +551,7 @@ const P = {
     eyebrow: "University of Michigan · August to December 2025",
     title: "Underwater ROV",
     lede: "A remotely operated vehicle for offshore wind farm inspection in Lake Michigan, built to check risers, tethers and power cables and tested against a real lake-current requirement.",
-    hero: { img: "rov-close", alt: "The ROV in the test tank" },
+    hero: { img: "rov-close", alt: "The ROV in the test tank", small: true },
     meta: [["My role", "Testing Lead"], ["When", "August to December 2025"], ["Team", "Five people"], ["Tools", "Onshape, load cell, tow tank"]],
     specs: [["$256", "", "total build cost"], ["4.38", "N", "surge thrust, matched pair"], ["1.94", "N", "heave thrust per thruster"], ["2.17", "m/s", "lake-current requirement"], ["14", "min", "inspection run, with 30 allowed"]],
     tour: { img: "rov-cad", alt: "CAD render of the ROV", model: {
@@ -563,12 +564,12 @@ const P = {
         { match: ".", color: "#f3f1ee", roughness: 0.6, metalness: 0 } ],
       steps: [
         { part: "^End_Hex_<2>$", at: [1, 0.5, 0.5], view: [35, 22] },
-        { part: "^Payload_Assembly_<1>$", at: [0.5, 0.5, 0.5], view: [70, 16] },
+        { part: "^Payload_Assembly_<1>$", at: [0.5, 0.5, 0.5], view: [20, 18] },
         { part: "^MountA__Thruster_<1>$", at: [0.5, 0.5, 0.5], view: [30, 24] },
         { view: [-30, 30] } ],
       open: { step: 1, seconds: 2.6,
         hinges: [ { parts: "^MountA__", pivot: "^RailA$", axis: [0, 0, 1], angle: 180 }, { parts: "^MountB__", pivot: "^RailB$", axis: [0, 0, 1], angle: -180 } ],
-        slides: [ { parts: "^Payload_Assembly_<1>$", axis: [0, 0, 1], dist: 0.45 } ] } },
+        slides: [ { parts: "^Payload_Assembly_<1>$", axis: [1, 0, 0], dist: 0.34 } ] } },
     steps: [
       { x: 13.5, y: 48, tag: "PVC frame", name: "Frame", head: "A pentagonal-prism frame",
         body: "I came up with the pentagonal-prism frame in Onshape. It wraps tightly around the stacked electronics and battery canisters, cuts wasted internal volume, and helped keep the total build cost to $256." },
@@ -678,7 +679,7 @@ const ROUTE = "M205 521 Q260 521 270 580 Q278 623 301 623 L790 623 Q818 623 818 
 function renderProject(slug) {
   const p = P[slug], n = P[p.next];
   let h = `<section class="wrap p-hero"><a class="back" href="#work">‹ All work</a><p class="kicker">${p.eyebrow}</p><h1>${p.title}</h1><p class="lede">${p.lede}</p></section>`;
-  h += `<section class="wrap-wide p-media">${pic(p.hero.img, "(max-width: 1440px) 100vw, 1440px", p.hero.alt, `fetchpriority="high"`)}</section>`;
+  h += `<section class="wrap-wide p-media${p.hero.small ? " small" : ""}">${pic(p.hero.img, "(max-width: 1440px) 100vw, 1440px", p.hero.alt, `fetchpriority="high"`)}</section>`;
   h += `<section class="wrap"><dl class="meta">${p.meta.map(m => `<div><dt>${m[0]}</dt><dd>${m[1]}</dd></div>`).join("")}</dl>`;
   h += `<div class="specs"><h2 class="h2">Key specs</h2><dl class="tn">${p.specs.map(s => `<div><dt><span class="num">${s[0]}</span>${s[1] ? `<small> ${s[1]}</small>` : ""}</dt><dd>${s[2]}</dd></div>`).join("")}</dl></div>`;
   if (p.tour) {
