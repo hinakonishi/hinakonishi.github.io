@@ -70,7 +70,8 @@ export async function mountTour(frame, cfg) {
   }
   const tmp = new THREE.Matrix4();
   const setOpen = t => {
-    const hinge = ease(clamp(t / 0.55, 0, 1)), slide = ease(clamp((t - 0.45) / 0.55, 0, 1));
+    const both = op.hinges && op.hinges.length && op.slides && op.slides.length;
+    const hinge = ease(clamp(both ? t / 0.55 : t, 0, 1)), slide = ease(clamp(both ? (t - 0.45) / 0.55 : t, 0, 1));
     for (const m of movers) { tmp.copy(m.make(hinge, slide)).multiply(m.base).premultiply(m.inv); tmp.decompose(m.o.position, m.o.quaternion, m.o.scale); }
     root.updateMatrixWorld(true);
   };
@@ -78,9 +79,11 @@ export async function mountTour(frame, cfg) {
   // framing for the closed and the open model, so nothing leaves the frame as it opens
   const fitOf = () => { const b = box(root), s = b.getSize(new THREE.Vector3()); return { c: b.getCenter(new THREE.Vector3()), r: s.length() * 0.5 }; };
   setOpen(1); const F1 = fitOf(); setOpen(0); const F0 = fitOf();
+  const startC = F0.c;
 
   // ---------- tags: the tour's own .pt elements, one per step ----------
   const pts = [...frame.querySelectorAll(".pt")];
+  const focusNodes = (cfg.steps || []).map(s => (s.focus && s.part && byName(s.part)[0]) || null);
   const tags = (cfg.steps || []).map((s, i) => {
     const el = frame.querySelector(`.pt[data-pt="${i}"]`); if (!el || !s.part) return null;
     const node = byName(s.part)[0]; if (!node) { console.warn("[tour3d] no part matches", s.part); return null; }
@@ -98,7 +101,11 @@ export async function mountTour(frame, cfg) {
   frame.setAttribute("aria-label", (cfg.label || "3D model") + ". Drag or use the arrow keys to rotate, plus and minus to zoom.");
 
   const views = (cfg.steps || []).map(s => s.view || [35, 20]);
-  const view = { az: views[0][0], el: views[0][1], d: 1 }, want = { ...view };
+  // a step can zoom in (zoom < 1) and center the camera on its tagged part (focus: true)
+  const stepZoom = i => (cfg.steps && cfg.steps[i] && cfg.steps[i].zoom) || 1;
+  const view = { az: views[0][0], el: views[0][1], d: 1, s: stepZoom(0), f: 0, cx: 0, cy: 0, cz: 0 }, want = { ...view };
+  const fc = new THREE.Vector3();
+  view.cx = startC.x; view.cy = startC.y; view.cz = startC.z;
   let user = false, zoom = 1, uaz = 0, uel = 0;
   const takeOver = () => { if (!user) { user = true; uaz = want.az; uel = want.el; frame.classList.add("m3d-user"); } };
   const zoomBy = f => { zoom = clamp(zoom * f, 0.4, 1.6); takeOver(); };
@@ -153,12 +160,17 @@ export async function mountTour(frame, cfg) {
     const v = views[step] || views[0];
     if (user) { want.az = uaz; want.el = uel; } else { want.az = v[0] + (p - 0.5) * (cfg.drift ?? 30); want.el = v[1]; }
     want.d = zoom;
+    want.s = user ? 1 : stepZoom(step);
+    const fn = focusNodes[step];
+    if (fn && !user) { box(fn).getCenter(fc); want.f = 1; want.cx = fc.x; want.cy = fc.y; want.cz = fc.z; } else want.f = 0;
     const k = reduce ? 1 : 1 - Math.pow(0.004, dt);
-    for (const key in view) view[key] += (want[key] - view[key]) * k;
+    for (const key of ["az", "el", "d", "s"]) view[key] += (want[key] - view[key]) * k;
 
     const o = ease(openT), c = F0.c.clone().lerp(F1.c, o), rad = THREE.MathUtils.lerp(F0.r, F1.r, o);
+    if (want.f) { view.cx += (want.cx - view.cx) * k; view.cy += (want.cy - view.cy) * k; view.cz += (want.cz - view.cz) * k; } else { view.cx = c.x + (view.cx - c.x) * (1 - k); view.cy = c.y + (view.cy - c.y) * (1 - k); view.cz = c.z + (view.cz - c.z) * (1 - k); }
+    c.set(view.cx, view.cy, view.cz);
     const vfov = deg(cam.fov), hfov = 2 * Math.atan(Math.tan(vfov / 2) * cam.aspect);
-    const d = rad / Math.sin(Math.min(vfov, hfov) / 2) * (cfg.fit ?? 0.95) * view.d, az = deg(view.az), el = deg(view.el);
+    const d = rad / Math.sin(Math.min(vfov, hfov) / 2) * (cfg.fit ?? 0.95) * view.d * view.s, az = deg(view.az), el = deg(view.el);
     cam.position.set(c.x + Math.sin(az) * Math.cos(el) * d, c.y + Math.sin(el) * d, c.z + Math.cos(az) * Math.cos(el) * d);
     cam.near = d / 100; cam.far = d * 10; cam.updateProjectionMatrix(); cam.lookAt(c);
     renderer.render(scene, cam);
@@ -168,9 +180,14 @@ export async function mountTour(frame, cfg) {
       if (!tg) return;
       tg.v.copy(tg.local); tg.node.localToWorld(tg.v); tg.v.project(cam);
       const x = (tg.v.x * 0.5 + 0.5) * W, y = (-tg.v.y * 0.5 + 0.5) * H;
-      const need = tg.el.lastElementChild.offsetWidth + 30;
+      // the label goes on the roomier side when it does not fit where it prefers, and wraps if it fits neither
+      const lbl = tg.el.lastElementChild, spaceL = x - 34, spaceR = W - x - 34;
+      lbl.classList.remove("wrap"); lbl.style.maxWidth = "";
+      const need = lbl.offsetWidth;
       let left = x > W * 0.6;
-      if (left && x - need < 0) left = false; else if (!left && x + need > W && x - need > 0) left = true;
+      if (left && need > spaceL && spaceR > spaceL) left = false; else if (!left && need > spaceR && spaceL > spaceR) left = true;
+      const room = left ? spaceL : spaceR;
+      if (need > room) { lbl.classList.add("wrap"); lbl.style.maxWidth = Math.max(90, room) + "px"; }
       tg.el.classList.toggle("l", left); tg.el.classList.toggle("r", !left);
       tg.el.style.left = x.toFixed(1) + "px"; tg.el.style.top = y.toFixed(1) + "px";
     });

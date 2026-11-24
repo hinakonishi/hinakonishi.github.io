@@ -419,13 +419,13 @@ img.cad { object-fit: contain !important; }
     <div class="photo"><img src="i/sm/portrait.webp" srcset="i/sm/portrait.webp 640w, i/portrait.webp 1280w" sizes="(max-width: 720px) 100vw, 520px" decoding="async" alt="Portrait of Hinako Nishi" style="object-position: 50% 35%"></div>
     <div class="txt">
       <h2 class="h2" id="about-h">About me</h2>
-      <p class="lead">I’m a sophomore at the University of Michigan studying Mechanical Engineering with a minor in Mathematics. I learn best by building.</p>
+      <p class="lead">I’m a junior at the University of Michigan studying Mechanical Engineering with a minor in Mathematics. I learn best by building.</p>
       <div class="interests">
         <h3>Interested in</h3>
         <ul>
           <li><strong>Robotics</strong><span>Field robots, grippers and competition robots</span></li>
           <li><strong>Drones</strong><span>Flight control, propulsion and lift systems</span></li>
-          <li><strong>Electric vehicles</strong><span>Electric drivetrains and battery systems</span></li>
+          <li><strong>Product design</strong><span>Designing hardware people use, from sketch to prototype</span></li>
         </ul>
       </div>
       <dl class="ledger tn">
@@ -466,13 +466,27 @@ const P = {
   "solar-car-wing": {
     eyebrow: "University of Michigan Solar Car Team · August 2026 to present",
     title: "Solar Car Dual Wing System",
-    lede: "A dual static-cambered wing system for a solar race car. A motorized elevator raises whichever wing suits the wind so it helps push the car forward.",
+    lede: "Two static cambered wings that let a solar race car use the wind for extra thrust and cut race time. A motorized elevator raises whichever wing suits the wind in 7 seconds.",
     hero: { img: "sc-p15", alt: "CAD render of the full wing assembly with one wing raised" },
     meta: [["My role", "Wing Mechanical Engineer"], ["When", "August 2026 to present"], ["Team", "4 on the wing subsystem"], ["Car", "ELYSIUM"], ["Tools", "Siemens NX, FEA, hand calculations, belt and motor sizing"], ["Result", "Design locked in November 2026, every part passing the max load case in FEA"]],
     specs: [["7", "s", "to raise one wing"], ["0.7", "m", "of wing travel, stowed to raised"], ["8.5", "kg", "full wing assembly"], ["150", "N", "side load the design is checked against"], ["2.1", "×", "safety factor to ultimate at max load"], ["1.86", "mm", "max wing deflection in FEA"]],
-    tour: { img: "sc-p2-sq", alt: "CAD renders of the wing elevator", steps: [
+    tour: { img: "sc-p2-sq", alt: "CAD renders of the wing elevator", model: {
+      model: "models/wing.glb", label: "3D model of the wing elevator", rotation: [-90, 0, 0], edges: true, fit: 0.95, drift: 30,
+      colors: [
+        { match: "WING-21[01]", color: "#45494d", roughness: 0.5, metalness: 0.05 },
+        { match: "WING-(204|228)", color: "#2b2a2e", roughness: 0.35, metalness: 0.2 },
+        { match: "(^|/)127\\d{3}|FIN-1115", color: "#9aa0a6", roughness: 0.35, metalness: 0.6 },
+        { match: "WING-(205|206|207|208|122|146|216|217)|FIN-(262|161)", color: "#3a3d41", roughness: 0.6, metalness: 0.3 },
+        { match: ".", color: "#bfc4c9", roughness: 0.4, metalness: 0.5 } ],
+      steps: [
+        { part: "^2027-WING-205$", at: [0.5, 0.5, 0.5], view: [160, 12], zoom: 0.5, focus: true },
+        { part: "^127063$", at: [0.5, 0.5, 1], view: [30, 22], zoom: 0.45, focus: true },
+        { part: "^2027-WING-202$", at: [0.5, 0.5, 0.5], view: [55, 24], zoom: 0.45, focus: true },
+        { part: "^2027-WING-210$", at: [0.5, 0.85, 1], view: [-40, 12] } ],
+      open: { step: 3, seconds: 2.2, slides: [ { parts: "^2027-WING-308$", axis: [0, 1, 0], dist: 0.6 } ] } },
+    steps: [
       { img: "sc-p2-sq", x: 45, y: 55, tag: "Straight carriage on linear bearing", name: "Carriage", head: "A straight carriage for each wing",
-        body: "I came up with the overall layout and mechanism, and designed the left and right elevator carriages, belt clamps and fin couplers. Each carriage rides a carbon-fiber linear rail on a linear bearing, held by an M5 bolt, and the belt clamp ties it to the timing belt. The wing is bonded to a square carbon rod that the fin coupler joins to the carriage. All machined parts are 7075 aluminum." },
+        body: "I came up with the overall layout and mechanism, and designed the left and right elevator carriages, belt clamps and fin couplers. Each carriage rides a linear guide rail on a linear bearing, held by an M5 bolt, and the belt clamp ties it to the timing belt. The wing is bonded to a square carbon rod that the fin coupler joins to the carriage. All machined parts are 7075 aluminum." },
       { img: "sc-p4-sq", x: 47, y: 50, tag: "27:1 motors and HTD pulleys", name: "Drive", head: "One motor per wing",
         body: "I designed the lower assembly. Each wing has its own 27:1 DC motor (3.8 Nm) driving 24T and 16T 5 mm HTD pulleys to pull its carriage up the rail. A 2.0 Nm brake holds the wing in place and limit switches stop travel at each end. Our hand calcs put the lift at about 23 N and 3.5 W once a 1.5 safety factor is applied." },
       { img: "sc-p5-sq", x: 72, y: 35, tag: "Belt tensioners", name: "Top bracket", head: "Tensioned belts and a bonded mount",
@@ -482,12 +496,12 @@ const P = {
     ]},
     fix: { kicker: "The problem", title: "Why the old elevator didn’t fit",
       body: ["The 2027 car switched from the single yawing wing used in 2025 to two static-cambered CH10 wings. The belt-pulley elevator from past seasons was too wide to house both wings inside the 200 mm wide chassis cutout.",
-        "We compared three options before I came up with the current layout: a straight carriage for each wing that rides straight up its own carbon-fiber linear rail, with its own motor and belt drive below. It kept the proven belt and pulley drive while fixing the packaging and keeping the motors reachable."],
+        "We compared three options before I came up with the current layout: a straight carriage for each wing that rides straight up its own linear guide rail, with its own motor and belt drive below. It kept the proven belt and pulley drive while fixing the packaging and keeping the motors reachable."],
       table: { title: "Options we compared", sub: "Against a 200 mm cutout, a 150 N side load and a 6 to 7 second deploy time", head: ["Option", "What we found"], rows: [
         ["Lead screw", "Packaged easily, but needed about 1,600 RPM to meet the microsystems team’s deploy time. Standard lead screws are rated below 200 RPM and would whip, vibrate and wear."],
         ["Slanted carriage on linear bushings", "Resisted the 150 N side load best, but came out 210 mm wide."],
         ["L-shaped carriage", "Fit the width on paper, but laid out with the rest of the car it broke the packaging limits and left the motors hard to reach."],
-        ["Straight carriage on a carbon-fiber rail<span>Chosen</span>", "Fits the cutout, keeps the proven belt drive and leaves the motors reachable."] ] },
+        ["Straight carriage on a linear guide rail<span>Chosen</span>", "Fits the cutout, keeps the proven belt drive and leaves the motors reachable."] ] },
       before: ["1,600 RPM", "needed from a lead screw, against a rated limit below 200 RPM"],
       after: ["7 s", "to raise each wing with a straight carriage and belt drive"],
       result: "Meets the 7 s deploy time and passes the 150 N load case at a safety factor of 2.1." },
@@ -498,7 +512,7 @@ const P = {
         tables: [{ title: "FEA and hand-calc margins", sub: "Max load case: 150 N side force at 35° angle of attack", head: ["", "Result"], rows: [
           ["Max stress<span>Base of the square carbon rod</span>", "272 MPa"], ["Safety factor to ultimate<span>Requirement: 1.5 to yield</span>", "2.1"], ["Max wing deflection", "1.86 mm"],
           ["Clearance, wing to top bracket", "3.7 mm and 5.35 mm"], ["Bonded top mount<span>Against 6.5 MPa adhesive strength, safety factor 125</span>", "52 kPa"], ["Lift power<span>2.3 W calculated, then a 1.5 safety factor</span>", "3.5 W"] ] }] },
-      { kicker: "Next steps", title: "From locked CAD to a prototype", body: ["The design was locked on November 22, 2026. Next, the team will CNC a first prototype to check fit and clearances, and the chassis cutout is being updated to clear the new assembly. I expect small changes as the aerodynamics team refines the airfoil shape."], media: [["sc-p7", "Both wings stowed"], ["sc-p13", "Bonded top mount load in the FEA setup"]] }
+      { kicker: "Next steps", title: "From CAD to a prototype", body: ["Next, the team will CNC a first prototype to check fit and clearances, and the chassis cutout is being updated to clear the new assembly. I expect small changes as the aerodynamics team refines the airfoil shape."], media: [["sc-p7", "Both wings stowed"], ["sc-p13", "Bonded top mount load in the FEA setup"]] }
     ],
     watch: ["https://www.solarcar.engin.umich.edu/", "University of Michigan Solar Car Team"],
     gallery: [["sc-p1", "The full car with one wing raised"], ["sc-p3", "Carriage on the linear rail with the carbon rod"], ["sc-p8", "Top view of both CH10 wings in the elevator"], ["sc-p14", "Lower assembly, top view"]],
@@ -538,7 +552,7 @@ const P = {
     lede: "A remotely operated vehicle for offshore wind farm inspection in Lake Michigan, built to check risers, tethers and power cables and tested against a real lake-current requirement.",
     hero: { img: "rov-close", alt: "The ROV in the test tank" },
     meta: [["My role", "Testing Lead"], ["When", "August to December 2025"], ["Team", "Five people"], ["Tools", "Onshape, load cell, tow tank"]],
-    specs: [["$256", "", "total build cost"], ["4.38", "N", "surge thrust, matched pair"], ["1.94", "N", "heave thrust per thruster"], ["2.17", "m/s", "lake-current requirement"], ["14", "min", "inspection run, with 30 allowed"], ["2.5", "×", "full-scale factor"]],
+    specs: [["$256", "", "total build cost"], ["4.38", "N", "surge thrust, matched pair"], ["1.94", "N", "heave thrust per thruster"], ["2.17", "m/s", "lake-current requirement"], ["14", "min", "inspection run, with 30 allowed"]],
     tour: { img: "rov-cad", alt: "CAD render of the ROV", model: {
       model: "models/rov.glb", label: "3D model of the ROV", rotation: [-90, 0, 0], edges: true, fit: 0.95, drift: 30,
       colors: [
@@ -551,7 +565,7 @@ const P = {
         { part: "^End_Hex_<2>$", at: [1, 0.5, 0.5], view: [35, 22] },
         { part: "^Payload_Assembly_<1>$", at: [0.5, 0.5, 0.5], view: [70, 16] },
         { part: "^MountA__Thruster_<1>$", at: [0.5, 0.5, 0.5], view: [30, 24] },
-        { part: "^RailA$", at: [0.5, 1, 0.5], view: [-30, 30] } ],
+        { view: [-30, 30] } ],
       open: { step: 1, seconds: 2.6,
         hinges: [ { parts: "^MountA__", pivot: "^RailA$", axis: [0, 0, 1], angle: 180 }, { parts: "^MountB__", pivot: "^RailB$", axis: [0, 0, 1], angle: -180 } ],
         slides: [ { parts: "^Payload_Assembly_<1>$", axis: [0, 0, 1], dist: 0.45 } ] } },
@@ -562,24 +576,15 @@ const P = {
         body: "Attaching and detaching the electronics canister was a bottleneck, with only 5 minutes to deploy. A rotating PVC segment built into the frame hinges outward so the canister can be pulled and reseated without tools." },
       { x: 70, y: 44, tag: "Thrusters, paired by output", name: "Thrusters", head: "Load-cell thruster testing",
         body: "I led thruster force testing with a calibrated load cell and a 3:1 lever arm, measuring forward and reverse thrust on all four thrusters. I paired them by matched output, 4.38 N and 4.25 N for surge and 1.94 N each for heave, to minimize unwanted yaw and pitch." },
-      { x: 40, y: 22, tag: "Pool-noodle buoyancy", name: "Stability", head: "Buoyancy and ballast",
+      { name: "Stability", head: "Buoyancy and ballast",
         body: "We validated hydrostatic stability and ran surge and heave trials in the Marine Hydrodynamics Lab, tuning the buoyancy and ballast so the ROV rights itself in rough water." }
     ]},
     chapters: [
-      { kicker: "Requirements", title: "What it needed to do", body: ["It had to be maneuverable enough to navigate around riser and tether lines, stable in rough water, quick to deploy and retrieve, and simple enough to hold up to repeated use."], media: [["rov-wide", "The ROV in the tow tank"]] },
-      { kicker: "Scaling", title: "Scaling up by 2.5×", body: ["I led the scaling calculations. At 2.5× the prototype’s 4.7 kg becomes about 74 kg, and holding the required forward speed fixed sized the full-scale thrusters at about 1,461 N and 45.9 kW of brake power for surge."], media: [], tables: [
-        { title: "Prototype to full scale", sub: "2.5× scale factor, same water density", head: ["", "Prototype", "Scaling", "Full scale"], rows: [
-          ["Length", "17.5 in", "× 2.5", "43.8 in"], ["Width", "11.4 in", "× 2.5", "28.5 in"], ["Height", "11 in", "× 2.5", "27.5 in"],
-          ["Center of gravity<span>LCG × TCG × VCG</span>", "7.56 × 5.5 × 6.36 in", "× 2.5 each", "18.9 × 13.8 × 15.9 in"],
-          ["Center of buoyancy<span>LCG × TCG × VCG</span>", "7.63 × 5.5 × 5.23 in", "× 2.5 each", "19.1 × 13.8 × 13.1 in"],
-          ["Weight", "4.7 kg", "× 2.5³", "73.7 kg"], ["Buoyancy", "28.1 N", "× 2.5³", "439.1 N"] ] },
-        { title: "Full-scale surge performance", sub: "Against the 2.17 m/s current requirement", head: ["", "Value"], rows: [
-          ["Drag coefficient", "1.7"], ["Cross-sectional area", "0.37 m²"], ["Velocity", "2.17 m/s"], ["Thrust", "1,461 N"], ["Brake power", "45.9 kW"], ["Propulsive efficiency", "6.9%"] ] }
-      ] },
+      { kicker: "Requirements", title: "What it needed to do", body: ["It had to be maneuverable enough to navigate around riser and tether lines, stable in rough water, quick to deploy and retrieve, and simple enough to hold up to repeated use."], media: [["rov-testing", "Testing in the tank"]] },
       { kicker: "Inspection run", title: "A 14-minute riser inspection", body: ["We planned a counterclockwise route ahead of time. Two teammates watched the video feed for damage so the driver could focus on navigation, and a third kept the tether untangled.", "We finished in about 14 minutes, well inside the 30-minute limit, and corrected two misidentified segments before docking."], route: true, media: [["rov-route", "Planned counterclockwise inspection route around the four risers"]] }
     ],
     watch: ["https://www.youtube.com/watch?v=imJlO7OGt2E", "Watch the testing footage on YouTube"],
-    gallery: [["rov-team", "On the tow-tank platform"], ["rov-ctrl", "The controller"], ["rov-testing", "Testing in the tank"], ["rov-rig", "Setting up the load-cell rig"], ["rov-cgcb", "Centers of buoyancy and gravity"], ["rov-mount", "Rotating mount in Onshape"], ["rov-dims", "Front and back views"]],
+    gallery: [["rov-team", "On the tow-tank platform"], ["rov-ctrl", "The controller"], ["rov-rig", "Setting up the load-cell rig"], ["rov-wide", "Tow tank"], ["rov-cgcb", "Centers of buoyancy and gravity"], ["rov-mount", "Rotating mount in Onshape"], ["rov-dims", "Front and back views"]],
     next: "gripper"
   },
   gripper: {
@@ -986,7 +991,13 @@ route();
   "elevation": [16, 6],
   "edges": true,
   "move": { "parts": "^2027-WING-308$", "axis": [0, 1, 0], "from": 0, "to": 0.6 },
-  "colors": [],
+  "colors": [
+    { "match": "^2027-WING-21[01]$", "color": "#45494d", "roughness": 0.5, "metalness": 0.05 },
+    { "match": "^2027-WING-(204|228)$", "color": "#2b2a2e", "roughness": 0.35, "metalness": 0.2 },
+    { "match": "^(127\\d{3}|2025-FIN-1115)$", "color": "#9aa0a6", "roughness": 0.35, "metalness": 0.6 },
+    { "match": "^(2027-WING-(205|206|207|208|122|146|216|217)|2026-FIN-(262|161))$", "color": "#3a3d41", "roughness": 0.6, "metalness": 0.3 },
+    { "match": "^(?!=>)", "color": "#bfc4c9", "roughness": 0.4, "metalness": 0.5 }
+  ],
   "tags": [
     { "text": "Wing raised 0.6 m", "short": "Wing raised 0.6 m", "part": "^2027-WING-210$", "at": [0.5, 0.85, 1], "whenMoved": true },
     { "text": "Top bracket and belt tensioners", "short": "Top bracket", "part": "^2027-WING-201$", "at": [0.5, 0.5, 1] },

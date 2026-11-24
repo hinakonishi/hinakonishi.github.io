@@ -7,6 +7,8 @@
 .tour .frame.t3d .pt { z-index: 2; }
 .tour .frame.t3d.m3d-ready img { opacity: 0 !important; }
 .tour .frame.t3d:not(.m3d-ready) .pt { visibility: hidden; }
+.tour .frame.t3d .pt .lbl.wrap { white-space: normal; width: max-content; border-radius: 14px; line-height: 1.25; top: auto; transform: translateY(-50%); }
+.tour .frame.t3d .pt.on .lbl.wrap { transform: translateY(-50%); }
 .tour .frame.t3d .m3d-ui { left: 20px; right: 16px; bottom: 14px; }
 
 @media (max-width: 720px) {
