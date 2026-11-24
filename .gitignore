@@ -1,0 +1,4 @@
+# CAD sources and intermediate models (not served)
+*.step
+*.stp
+raw*.glb
