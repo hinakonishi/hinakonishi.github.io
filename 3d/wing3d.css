@@ -1,0 +1,42 @@
+/* wing3d.css: styles for the 3D feature model (see wing3d.js). Uses the site's color tokens. */
+
+/* Reserve the 3D stage as soon as we know we'll try to load it, so nothing jumps when it arrives */
+.feature .cut.m3d { width: auto; max-width: none; height: clamp(520px, 78vh, 820px); padding-bottom: 0; margin-inline: calc(-1 * clamp(12px, 3vw, 48px)); touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; outline: none; }
+.feature .cut.m3d > img { position: absolute; inset: 0; margin: auto; height: 86%; width: auto; max-width: 100%; object-fit: contain; transition: opacity 500ms var(--ease); }
+.feature .cut.m3d > .tag { display: none; }
+.feature .cut.m3d.m3d-ready > img { opacity: 0; }
+.feature .cut.m3d.m3d-drag { cursor: grabbing; }
+.feature .cut.m3d:focus-visible { box-shadow: 0 0 0 3px var(--accent); border-radius: var(--r); }
+.feature:has(.m3d-ready) .tag-list { display: none; }
+
+.m3d-canvas { position: absolute; inset: 0; z-index: 1; display: block; width: 100%; height: 100%; opacity: 0; transition: opacity 500ms var(--ease); }
+.m3d-ready .m3d-canvas { opacity: 1; }
+
+/* Tags, same look as the site's static .tag */
+.m3d-tag { position: absolute; left: 0; top: 0; z-index: 2; display: flex; align-items: center; pointer-events: none; will-change: transform; transition: opacity 300ms var(--ease); }
+.m3d-tag.l { flex-direction: row-reverse; }
+.m3d-tag .dot { flex: none; width: 12px; height: 12px; border-radius: 999px; background: var(--pink); box-shadow: 0 0 0 4px var(--ring); }
+.m3d-tag.r .dot { margin-left: -6px; } .m3d-tag.l .dot { margin-right: -6px; }
+.m3d-tag .ln { width: 40px; height: 1.5px; background: var(--ink); }
+.m3d-tag .lbl { white-space: nowrap; background: var(--tile); color: var(--ink); border: 1px solid var(--ink); font-size: 14px; font-weight: 500; padding: 6px 14px; border-radius: 999px; }
+.m3d-tag.off { opacity: 0; }
+
+/* Controls */
+.m3d-ui { position: absolute; z-index: 3; left: 24px; right: 24px; bottom: 16px; display: flex; align-items: center; justify-content: space-between; pointer-events: none; opacity: 0; transition: opacity 400ms; }
+.m3d-ready .m3d-ui { opacity: 1; }
+.m3d-hint { font-size: 14px; color: var(--muted); transition: opacity 300ms; }
+.m3d-user .m3d-hint { opacity: 0; }
+.m3d-btns { display: flex; gap: 8px; margin-left: auto; }
+.m3d-btns button { pointer-events: auto; min-width: 44px; height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--tile); color: var(--ink); font: 500 15px var(--sans); cursor: pointer; }
+.m3d-btns button:hover { border-color: var(--ink); }
+.m3d-btns button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.m3d-reset { opacity: 0; pointer-events: none !important; transition: opacity 200ms; }
+.m3d-user .m3d-reset { opacity: 1; pointer-events: auto !important; }
+
+@media (max-width: 720px) {
+  .feature .cut.m3d { height: 560px; margin-inline: -16px; }
+  .m3d-tag .lbl { font-size: 12px; padding: 4px 10px; }
+  .m3d-tag .ln { width: 20px; }
+  .m3d-hint { display: none; }
+  .m3d-ui { left: 16px; right: 16px; }
+}
