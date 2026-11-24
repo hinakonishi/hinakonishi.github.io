@@ -16,6 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="3d/wing3d.css">
+<link rel="stylesheet" href="3d/tour3d.css">
 <style>
 html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; }
@@ -538,7 +539,23 @@ const P = {
     hero: { img: "rov-close", alt: "The ROV in the test tank" },
     meta: [["My role", "Testing Lead"], ["When", "August to December 2025"], ["Team", "Five people"], ["Tools", "Onshape, load cell, tow tank"]],
     specs: [["$256", "", "total build cost"], ["4.38", "N", "surge thrust, matched pair"], ["1.94", "N", "heave thrust per thruster"], ["2.17", "m/s", "lake-current requirement"], ["14", "min", "inspection run, with 30 allowed"], ["2.5", "×", "full-scale factor"]],
-    tour: { img: "rov-cad", alt: "CAD render of the ROV", steps: [
+    tour: { img: "rov-cad", alt: "CAD render of the ROV", model: {
+      model: "models/rov.glb", label: "3D model of the ROV", rotation: [-90, 0, 0], edges: true, fit: 0.95, drift: 30,
+      colors: [
+        { match: "Thruster|Camera", color: "#2b2a2e", roughness: 0.45, metalness: 0.2 },
+        { match: "Mounting_Bracket", color: "#3a3d41", roughness: 0.6, metalness: 0.3 },
+        { match: "Payload_Assembly_<1>/Part_[239]", color: "#bfc4c9", roughness: 0.4, metalness: 0.5 },
+        { match: "Payload_Assembly|BatteryTube", color: "#c9d6de", roughness: 0.15, metalness: 0, opacity: 0.5 },
+        { match: ".", color: "#f3f1ee", roughness: 0.6, metalness: 0 } ],
+      steps: [
+        { part: "^End_Hex_<2>$", at: [1, 0.5, 0.5], view: [35, 22] },
+        { part: "^Payload_Assembly_<1>$", at: [0.5, 0.5, 0.5], view: [70, 16] },
+        { part: "^MountA__Thruster_<1>$", at: [0.5, 0.5, 0.5], view: [30, 24] },
+        { part: "^RailA$", at: [0.5, 1, 0.5], view: [-30, 30] } ],
+      open: { step: 1, seconds: 2.6,
+        hinges: [ { parts: "^MountA__", pivot: "^RailA$", axis: [0, 0, 1], angle: 180 }, { parts: "^MountB__", pivot: "^RailB$", axis: [0, 0, 1], angle: -180 } ],
+        slides: [ { parts: "^Payload_Assembly_<1>$", axis: [0, 0, 1], dist: 0.45 } ] } },
+    steps: [
       { x: 13.5, y: 48, tag: "PVC frame", name: "Frame", head: "A pentagonal-prism frame",
         body: "I came up with the pentagonal-prism frame in Onshape. It wraps tightly around the stacked electronics and battery canisters, cuts wasted internal volume, and helped keep the total build cost to $256." },
       { x: 44, y: 45, tag: "Electronics canister", name: "Payload mount", head: "A rotating payload mount",
@@ -549,7 +566,7 @@ const P = {
         body: "We validated hydrostatic stability and ran surge and heave trials in the Marine Hydrodynamics Lab, tuning the buoyancy and ballast so the ROV rights itself in rough water." }
     ]},
     chapters: [
-      { kicker: "Requirements", title: "What it needed to do", body: ["It had to be maneuverable enough to navigate around riser and tether lines, stable in rough water, quick to deploy and retrieve, and simple enough to hold up to repeated use."], media: [["rov-labeled", "Frame, thrusters and payload canisters"]] },
+      { kicker: "Requirements", title: "What it needed to do", body: ["It had to be maneuverable enough to navigate around riser and tether lines, stable in rough water, quick to deploy and retrieve, and simple enough to hold up to repeated use."], media: [["rov-wide", "The ROV in the tow tank"]] },
       { kicker: "Scaling", title: "Scaling up by 2.5×", body: ["I led the scaling calculations. At 2.5× the prototype’s 4.7 kg becomes about 74 kg, and holding the required forward speed fixed sized the full-scale thrusters at about 1,461 N and 45.9 kW of brake power for surge."], media: [], tables: [
         { title: "Prototype to full scale", sub: "2.5× scale factor, same water density", head: ["", "Prototype", "Scaling", "Full scale"], rows: [
           ["Length", "17.5 in", "× 2.5", "43.8 in"], ["Width", "11.4 in", "× 2.5", "28.5 in"], ["Height", "11 in", "× 2.5", "27.5 in"],
@@ -562,7 +579,7 @@ const P = {
       { kicker: "Inspection run", title: "A 14-minute riser inspection", body: ["We planned a counterclockwise route ahead of time. Two teammates watched the video feed for damage so the driver could focus on navigation, and a third kept the tether untangled.", "We finished in about 14 minutes, well inside the 30-minute limit, and corrected two misidentified segments before docking."], route: true, media: [["rov-route", "Planned counterclockwise inspection route around the four risers"]] }
     ],
     watch: ["https://www.youtube.com/watch?v=imJlO7OGt2E", "Watch the testing footage on YouTube"],
-    gallery: [["rov-team", "On the tow-tank platform"], ["rov-ctrl", "The controller"], ["rov-testing", "Testing in the tank"], ["rov-rig", "Setting up the load-cell rig"], ["rov-wide", "Tow tank"], ["rov-cgcb", "Centers of buoyancy and gravity"], ["rov-mount", "Rotating mount in Onshape"], ["rov-dims", "Front and back views"]],
+    gallery: [["rov-team", "On the tow-tank platform"], ["rov-ctrl", "The controller"], ["rov-testing", "Testing in the tank"], ["rov-rig", "Setting up the load-cell rig"], ["rov-cgcb", "Centers of buoyancy and gravity"], ["rov-mount", "Rotating mount in Onshape"], ["rov-dims", "Front and back views"]],
     next: "gripper"
   },
   gripper: {
@@ -700,6 +717,20 @@ function renderProject(slug) {
   proj.innerHTML = h;
   $$("img", proj).forEach(i => i.addEventListener("load", () => update(), { once: true }));
   setupTour(); setupCounts();
+  if (p.tour && p.tour.model) mountTour3d(p.tour.model);
+}
+
+/* Optional 3D model in the Design breakdown frame, loaded only when the tour is near the screen */
+function mountTour3d(cfg) {
+  const frame = $(".tour .frame", proj);
+  const gl = (() => { try { const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); } catch (e) { return false; } })();
+  if (!frame || !gl || (navigator.connection && navigator.connection.saveData)) return;
+  frame.classList.add("t3d");
+  new IntersectionObserver((entries, io) => {
+    if (!entries[0].isIntersecting) return;
+    io.disconnect();
+    import("./3d/tour3d.js").then(m => m.mountTour(frame, cfg)).catch(err => { console.warn("[tour3d] showing the image instead:", err); frame.classList.remove("t3d"); });
+  }, { rootMargin: "800px 0px" }).observe(frame);
 }
 
 /* Pinned tour: the step crossing the middle of the screen drives the picture and its tag */
