@@ -64,7 +64,7 @@ h1, h2, h3 { text-wrap: balance; }
 /* Home hero */
 .hero { padding-block: clamp(48px, 7vw, 96px) 48px; text-align: center; }
 .hero .sub { margin: 0; font-size: 16px; color: var(--muted); }
-.hero h1 { margin: 16px 0 0; font-family: var(--serif); font-weight: 400; font-size: clamp(64px, 11vw, 168px); line-height: 0.95; letter-spacing: -0.035em; transform-origin: 50% 0; will-change: transform, opacity; }
+.hero h1 { margin: 16px 0 0; font-family: var(--serif); font-weight: 400; font-size: clamp(56px, 9.5vw, 144px); line-height: 0.95; letter-spacing: -0.035em; transform-origin: 50% 0; will-change: transform, opacity; }
 .hero .line { margin: 24px auto 0; max-width: 26ch; font-family: var(--serif); font-size: clamp(24px, 2.6vw, 36px); line-height: 1.2; letter-spacing: -0.01em; color: var(--muted); }
 .tilt-wrap { perspective: 1400px; }
 .tilt { transform-origin: 50% 0; will-change: transform; }
@@ -333,7 +333,7 @@ img.cad { object-fit: contain !important; }
   <section class="wrap hero" id="top">
     <p class="sub">Mechanical Engineering, University of Michigan</p>
     <h1 id="heroName">Hinako Nishi</h1>
-    <p class="line">Mechanical engineering student designing robots, drones and field hardware.</p>
+    <p class="line">Mechanical engineering student focused on product design, from first sketch to working hardware.</p>
   </section>
 
   <section class="wrap-wide">
@@ -343,7 +343,7 @@ img.cad { object-fit: contain !important; }
   </section>
 
   <section class="wrap intro" id="intro">
-    <p>I study Mechanical Engineering at the University of Michigan, with a minor in Mathematics. I’m designing the dual wing system for Michigan’s solar race car. Before that I built an amphibious inspection hovercraft, an underwater ROV, a robotic gripper and a competition robot, and designed an educational board game sold in Hong Kong.</p>
+    <p>I study Mechanical Engineering at the University of Michigan, with a minor in Mathematics, and I design the dual wing system on the University of Michigan Solar Car Team. My work runs from first concept to tested prototype, and I’m drawn to product design.</p>
   </section>
 
   <section aria-labelledby="hl-h">
@@ -372,17 +372,17 @@ img.cad { object-fit: contain !important; }
       <p class="more"><a href="#solar-car-wing">See the project ›</a></p>
       <div class="cut tall" id="cut">
         <img src="i/sc-p15.webp" decoding="async" alt="CAD render of the full wing assembly with one wing raised">
-        <div class="tag l" style="left: 30%; top: 25%"><span class="dot"></span><span class="ln"></span><span class="lbl">Wing raised 0.7 m</span></div>
+        <div class="tag l" style="left: 30%; top: 25%"><span class="dot"></span><span class="ln"></span><span class="lbl">Wing raised 0.6 m</span></div>
         <div class="tag l" style="left: 12%; top: 46%"><span class="dot"></span><span class="ln"></span><span class="lbl">Top bracket and belt tensioners</span></div>
         <div class="tag r" style="left: 82%; top: 62%"><span class="dot"></span><span class="ln"></span><span class="lbl">Second wing, stowed</span></div>
-        <div class="tag l" style="left: 40%; top: 72%"><span class="dot"></span><span class="ln"></span><span class="lbl">Carbon-fiber linear rail</span></div>
+        <div class="tag l" style="left: 40%; top: 72%"><span class="dot"></span><span class="ln"></span><span class="lbl">Linear guide rail</span></div>
         <div class="tag l" style="left: 30%; top: 92%"><span class="dot"></span><span class="ln"></span><span class="lbl">27:1 motors and HTD belt drive</span></div>
       </div>
       <ul class="tag-list">
-        <li>One wing raised 0.7 m</li>
+        <li>One wing raised 0.6 m</li>
         <li>Top bracket with the belt tensioners</li>
         <li>Second wing, stowed</li>
-        <li>Carbon-fiber linear rail for each carriage</li>
+        <li>Linear guide rail</li>
         <li>27:1 motors and HTD belt drive</li>
       </ul>
     </div>
@@ -946,22 +946,22 @@ route();
 <script type="importmap">{ "imports": { "three": "./vendor/three/three.module.min.js", "three/addons/": "./vendor/three/addons/" } }</script>
 <script type="application/json" id="wing3d-config">
 {
-  "enabled": false,
+  "enabled": true,
   "model": "models/wing.glb",
   "label": "3D model of the dual wing system",
-  "rotation": [0, 0, 0],
+  "rotation": [-90, 0, 0],
   "startAngle": -40,
   "turn": 200,
   "elevation": [16, 6],
   "edges": true,
-  "move": { "parts": "WING_A_PART_NAME", "axis": [0, 1, 0], "from": -0.7, "to": 0 },
+  "move": { "parts": "^2027-WING-308$", "axis": [0, 1, 0], "from": 0, "to": 0.6 },
   "colors": [],
   "tags": [
-    { "text": "Wing raised 0.7 m", "short": "Wing raised 0.7 m", "part": "WING_A_PART_NAME", "at": [0.5, 0.85, 1], "whenMoved": true },
-    { "text": "Top bracket and belt tensioners", "short": "Top bracket", "part": "TOP_BRACKET_PART_NAME", "at": [0.5, 0.5, 1] },
-    { "text": "Second wing, stowed", "short": "Second wing", "part": "WING_B_PART_NAME", "at": [0.5, 0.5, 1] },
-    { "text": "Carbon-fiber linear rail", "short": "Carbon-fiber rail", "part": "RAIL_PART_NAME", "at": [0.5, 0.35, 1] },
-    { "text": "27:1 motors and HTD belt drive", "short": "27:1 motors", "part": "MOTOR_PART_NAME", "at": [0.5, 0.5, 1] }
+    { "text": "Wing raised 0.6 m", "short": "Wing raised 0.6 m", "part": "^2027-WING-210$", "at": [0.5, 0.85, 1], "whenMoved": true },
+    { "text": "Top bracket and belt tensioners", "short": "Top bracket", "part": "^2027-WING-201$", "at": [0.5, 0.5, 1] },
+    { "text": "Second wing, stowed", "short": "Second wing", "part": "^2027-WING-211$", "at": [0.5, 0.5, 1] },
+    { "text": "Linear guide rail", "short": "Guide rail", "part": "^2027-WING-227$", "at": [0.5, 0.35, 1] },
+    { "text": "27:1 motors and HTD belt drive", "short": "27:1 motors", "part": "^127063$", "at": [0.5, 0.5, 1] }
   ]
 }
 </script>
