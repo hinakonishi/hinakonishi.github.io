@@ -360,7 +360,7 @@ img.cad { object-fit: contain !important; }
     </div>
     <div class="rail" id="rail">
       <a class="hl" href="#solar-car-wing"><div class="t"><p>Solar car wing · 2026</p><strong class="tn">Each wing rises 0.7 m in 7 seconds.</strong></div><div class="m"><img src="i/sc-p8.webp" decoding="async" class="cad" alt="CAD render of both wings in the elevator, front view"></div></a>
-      <a class="hl dark" href="#hovercraft"><div class="t"><p>Hovercraft · 2026</p><strong class="tn">5 kg of lift at half throttle.</strong></div><div class="m"><img src="i/sm/hc-pool.webp" srcset="i/sm/hc-pool.webp 800w, i/hc-pool.webp 1042w" sizes="(max-width: 720px) 80vw, 380px" decoding="async" alt="Hovercraft with pink fan guards floating in a test pool" style="object-position: 58% 50%"></div></a>
+      <a class="hl dark" href="#hovercraft"><div class="t"><p>Hovercraft · 2026</p><strong class="tn">3.5 kg of lift at half throttle.</strong></div><div class="m"><img src="i/sm/hc-pool.webp" srcset="i/sm/hc-pool.webp 800w, i/hc-pool.webp 1042w" sizes="(max-width: 720px) 80vw, 380px" decoding="async" alt="Hovercraft with pink fan guards floating in a test pool" style="object-position: 58% 50%"></div></a>
       <a class="hl" href="#rov"><div class="t"><p>Underwater ROV · 2025</p><strong class="tn">Finished a 30-minute inspection task in 14.</strong></div><div class="m"><img src="i/sm/rov-wide.webp" srcset="i/sm/rov-wide.webp 800w, i/rov-wide.webp 1400w" sizes="(max-width: 720px) 80vw, 380px" decoding="async" alt="ROV floating in the tow tank" style="object-position: 50% 45%"></div></a>
       <a class="hl blush" href="#gripper"><div class="t"><p>Robotic gripper · 2024</p><strong class="tn">Cut gripper size 40% over four revisions.</strong></div><div class="m"><img src="i/sm/gr-black.webp" srcset="i/sm/gr-black.webp 743w, i/gr-black.webp 747w" sizes="(max-width: 720px) 80vw, 380px" decoding="async" alt="Final black V4 gripper prototype"></div></a>
       <a class="hl dark" href="#first-robotics"><div class="t"><p>FIRST Team 9421 · 2024</p><strong class="tn">Reached the 2024 FIRST World Championship as a rookie team.</strong></div><div class="m"><img src="i/sm/fr-field.webp" srcset="i/sm/fr-field.webp 450w, i/fr-field.webp 787w" sizes="(max-width: 720px) 80vw, 380px" decoding="async" alt="Team 9421 robot on the field during a match" style="object-position: 50% 70%"></div></a>
@@ -396,7 +396,7 @@ img.cad { object-fit: contain !important; }
     <div class="sec-head"><h2 class="h2" id="more-h">More projects</h2></div>
     <div class="scards" id="scards">
       <a class="scard dark" href="#hovercraft" style="--i:0">
-        <div class="t"><p class="kicker">Amphibious Inspection Hovercraft · Japan Infra Waymark</p><h3>An amphibious hovercraft for bridge inspection.</h3><p class="b tn">It crosses grass, gravel, water and gentle slopes. I designed and built it over six prototypes, reaching 5 kg of lift at half throttle.</p><span class="go">See the project ›</span></div>
+        <div class="t"><p class="kicker">Amphibious Inspection Hovercraft · Japan Infra Waymark</p><h3>An amphibious hovercraft for bridge inspection.</h3><p class="b tn">It crosses grass, gravel, water and gentle slopes. I designed and built it over three prototypes, reaching 3.5 kg of lift at half throttle.</p><span class="go">See the project ›</span></div>
         <div class="m"><img src="i/sm/hc-pool.webp" srcset="i/sm/hc-pool.webp 800w, i/hc-pool.webp 1042w" sizes="(max-width: 720px) 100vw, 520px" decoding="async" alt="Hovercraft with pink fan guards floating in a test pool" style="object-position: 58% 50%"></div>
       </a>
       <a class="scard sand" href="#rov" style="--i:1">
@@ -527,7 +527,7 @@ const P = {
     lede: "An inspection craft built to cross grass, gravel, water and gentle slopes to reach bridge infrastructure a wheeled robot can’t.",
     hero: { img: "hc-hero", alt: "The finished hovercraft with pink sakura fan guards", small: true },
     videos: { title: "On the water", wide: true, list: [["hover-pool", "The hovercraft hovering in the test pool"]] },
-    meta: [["My role", "Mechanical Engineering Intern"], ["When", "June to August 2026"], ["Tools", "SolidWorks, FDM printing, sewing"], ["Result", "5 kg of lift at half throttle"]],
+    meta: [["My role", "Mechanical Engineering Intern"], ["When", "June to August 2026"], ["Tools", "SolidWorks, FDM printing, sewing"], ["Result", "3.5 kg of lift at half throttle"]],
     specs: [["65", "cm", "final craft length, down from 75 cm"], ["3.5", "kg", "payload"], ["164", "Pa", "cushion pressure"], ["500", "CFM", "airflow"], ["120", "W", "lift power"], ["30", "%", "weight saved with one shared battery"]],
     tour: { img: "hc-stands", alt: "The finished hovercraft on display stands", model: {
       model: "models/hovercraft.glb", label: "3D model of the hovercraft", rotation: [-90, 0, 0], edges: true, fit: 0.95, drift: 30,
@@ -556,7 +556,7 @@ const P = {
     lift: { kicker: "The fix", title: "A smaller prop, not a bigger motor",
       body: ["Rather than chase a higher KV rating and risk over-revving, I re-specced the propeller down to recover RPM.", "I redesigned the duct to a 135 mm bore with 1.5 mm clearance, and shared one battery between lift and propulsion to save weight."] },
     chapters: [
-      { kicker: "Iteration", title: "Six prototypes, one hull", body: ["I built and rebuilt the craft across six prototypes, working the hull down from 75 cm to a final 65 cm while keeping it able to lift a 3.5 kg payload.", "I modeled and FDM-printed more than 10 core components in SolidWorks, then integrated a flight controller, GPS, antennas and 5 ESCs into a custom printed enclosure."], media: [["hc-cad", "Full CAD assembly in SolidWorks"]] },
+      { kicker: "Iteration", title: "Three prototypes, one hull", body: ["I built and rebuilt the craft across three prototypes, working the hull down from 75 cm to a final 65 cm while keeping it able to lift a 3.5 kg payload.", "I modeled and FDM-printed more than 10 core components in SolidWorks, then integrated a flight controller, GPS, antennas and 5 ESCs into a custom printed enclosure."], media: [["hc-cad", "Full CAD assembly in SolidWorks"]] },
       { kicker: "Design language", title: "One design language across every part", body: ["I leaned into the disc-shaped hull and gave every printed part a cherry-blossom motif. The lift fan cover is a five-petal blossom and the thruster guards echo the same petal shape, so the finished craft reads as one product. Printed in pink ASA."], media: [["hc-photocad", "Finished build next to its CAD model"]] },
       { kicker: "Manufacturing", title: "Skirt, drain holes and cost", body: ["The vertical slit in each reverse-T drain hole works as a one-way valve, and the holes are spaced evenly around the rim since the craft moves the same in every direction.", "I tested the finished skirt against a 3 cm step, water, gravel and grass, and wrote an 18-line manufacturing BOM to check unit cost and reproducibility."], media: [["hc-skirt", "Folded skirt, showing the pleats"], ["hc-drain", "One of 16 drain holes, cut and reinforced"]] }
     ],
@@ -731,7 +731,7 @@ function renderProject(slug) {
         <circle cx="100" cy="100" r="10" fill="#FEF8F9"/></g></svg>
         <div class="read tn"><span id="propIn">7.0</span><small> in</small></div>
         <p class="sub">lift propeller diameter</p>
-        <p class="done tn" id="propDone" style="opacity:0">5 kg of lift at half throttle</p>
+        <p class="done tn" id="propDone" style="opacity:0">3.5 kg of lift at half throttle</p>
       </div></div>`;
   }
   if (p.fix) {
