@@ -70,7 +70,7 @@ export async function mountTour(frame, cfg) {
   }
   const tmp = new THREE.Matrix4();
   const setOpen = t => {
-    const both = op.hinges && op.hinges.length && op.slides && op.slides.length;
+    const both = op && op.hinges && op.hinges.length && op.slides && op.slides.length;
     const hinge = ease(clamp(both ? t / 0.55 : t, 0, 1)), slide = ease(clamp(both ? (t - 0.45) / 0.55 : t, 0, 1));
     for (const m of movers) { tmp.copy(m.make(hinge, slide)).multiply(m.base).premultiply(m.inv); tmp.decompose(m.o.position, m.o.quaternion, m.o.scale); }
     root.updateMatrixWorld(true);
@@ -91,6 +91,9 @@ export async function mountTour(frame, cfg) {
     const p = new THREE.Vector3(b.min.x + (b.max.x - b.min.x) * at[0], b.min.y + (b.max.y - b.min.y) * at[1], b.min.z + (b.max.z - b.min.z) * at[2]);
     return { el, node, local: node.worldToLocal(p), v: new THREE.Vector3() };
   });
+
+  // steps whose part is not in the model (or that have no part) show no tag on the 3D view
+  pts.forEach(el => { if (!tags.some(t => t && t.el === el)) el.style.display = "none"; });
 
   // ---------- controls ----------
   const ui = document.createElement("div"); ui.className = "m3d-ui";
