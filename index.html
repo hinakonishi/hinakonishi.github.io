@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="3d/wing3d.css">
 <link rel="stylesheet" href="3d/tour3d.css">
 <style>
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--bar-h) + 8px); }
 body { margin: 0; }
 [hidden] { display: none !important; }
 /* Layout: warm paper page, rounded photo tiles, serif headlines over a clean sans; scroll drives one moment per section. Single light look by choice. */
@@ -52,7 +52,8 @@ h1, h2, h3 { text-wrap: balance; }
 .more { font-size: 17px; font-weight: 500; }
 .h2 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 4.6vw, 64px); line-height: 1.02; letter-spacing: -0.03em; }
 
-/* Top bar: sticky, hides while scrolling down, returns on scroll up */
+/* Top bar: sticky and always visible; --bar-h (set by script) keeps other sticky parts below it */
+:root { --bar-h: 72px; }
 .topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); transition: transform 350ms var(--ease), box-shadow 350ms var(--ease); }
 .topbar.scrolled { box-shadow: 0 1px 0 var(--line); }
 .topbar.hide { transform: translateY(-110%); }
@@ -137,7 +138,7 @@ h1, h2, h3 { text-wrap: balance; }
 /* Stacking project cards */
 .stack-sec { padding-block: 128px; }
 .scards { display: flex; flex-direction: column; gap: 32px; }
-.scard { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px + var(--i) * 16px); min-height: min(560px, 78vh); border-radius: var(--r); overflow: hidden; display: flex; flex-wrap: wrap; color: var(--ink); background: var(--tile); transform-origin: 50% 0; box-shadow: 0 -1px 0 rgba(34,26,29,.04), 0 -24px 48px -32px rgba(34,26,29,.35); }
+.scard { position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--bar-h) + 16px + var(--i) * 16px); min-height: min(560px, 78vh); border-radius: var(--r); overflow: hidden; display: flex; flex-wrap: wrap; color: var(--ink); background: var(--tile); transform-origin: 50% 0; box-shadow: 0 -1px 0 rgba(34,26,29,.04), 0 -24px 48px -32px rgba(34,26,29,.35); }
 .scard::after { content: ""; position: absolute; inset: 0; background: var(--char); opacity: var(--dim, 0); pointer-events: none; }
 .scard:hover { text-decoration: none; }
 .scard .t { flex: 5 1 340px; padding: clamp(32px, 4vw, 56px); display: flex; flex-direction: column; justify-content: center; gap: 16px; }
@@ -205,7 +206,7 @@ h1, h2, h3 { text-wrap: balance; }
 /* Pinned tour */
 .tour { padding-bottom: 112px; }
 .tour .grid { margin-top: 40px; display: flex; flex-wrap: wrap; gap: 32px 64px; align-items: flex-start; }
-.tour .stick { flex: 7 1 480px; min-width: 0; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); z-index: 2; }
+.tour .stick { flex: 7 1 480px; min-width: 0; position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--bar-h) + 16px); z-index: 2; }
 .tour .frame { position: relative; border-radius: var(--r); overflow: hidden; aspect-ratio: 1 / 1; background: var(--tile-2); }
 .tour .frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 500ms var(--ease); }
 .tour .frame img.on { opacity: 1; }
@@ -309,7 +310,7 @@ img.cad { object-fit: contain !important; }
   .tag-list { display: block; }
   .scard { position: relative; top: 0; }
   .scard::after { display: none; }
-  .tour .stick { top: calc(env(safe-area-inset-top, 0px) + 8px); }
+  .tour .stick { top: calc(env(safe-area-inset-top, 0px) + var(--bar-h)); padding-top: 8px; background: var(--bg); }
   .tour .frame { aspect-ratio: 4 / 3; max-height: 42vh; width: 100%; }
   .pt { display: none; }
   .steps li { min-height: 62vh; }
@@ -758,13 +759,15 @@ function mountTour3d(cfg) {
 let tour = null;
 function setupTour() {
   const steps = $$("[data-step]", proj);
-  tour = steps.length ? { steps, heads: steps.map(s => s.querySelector("h3")), pts: $$("[data-pt]", proj), imgs: $$("[data-ti]", proj), active: "0" } : null;
+  tour = steps.length ? { steps, heads: steps.map(s => s.querySelector("h3")), stick: $(".tour .stick", proj), pts: $$("[data-pt]", proj), imgs: $$("[data-ti]", proj), active: "0" } : null;
 }
 function updateTour(vh) {
   if (!tour) return;
-  // A step takes over once its heading passes 55% of the screen height, so the words and the picture change together
-  let idx = 0;
-  tour.heads.forEach((h, i) => { if (h.getBoundingClientRect().top < vh * 0.55) idx = i; });
+  // A step takes over once its heading passes 55% of the screen height, so the words and the picture change together.
+  // On phones the picture sits above the text, so the line is 80% of the way down the text area below it.
+  let idx = 0, line = vh * 0.55;
+  if (tour.stick && innerWidth <= 720) { const fb = tour.stick.getBoundingClientRect().bottom; line = Math.max(line, fb + (vh - fb) * 0.8); }
+  tour.heads.forEach((h, i) => { if (h.getBoundingClientRect().top < line) idx = i; });
   const i = String(idx);
   if (i === tour.active) return;
   tour.active = i;
@@ -843,6 +846,8 @@ function jump(y, smooth) { if (glide) glide.stop(); if (smooth && glide) glide.t
 
 /* Scroll-driven effects, recomputed once per frame */
 const bar = $("#topbar"), heroName = $("#heroName"), brandName = $("#brandName"), tilt = $("#tilt");
+const setBarH = () => document.documentElement.style.setProperty("--bar-h", bar.offsetHeight + "px");
+setBarH(); addEventListener("resize", setBarH); if (document.fonts) document.fonts.ready.then(setBarH);
 const intro = $("#intro"), introP = intro.querySelector("p"), cut = $("#cut"), cards = $$(".scard");
 let lastY = scrollY, words = [], litCount = -1;
 if (!reduce) {
@@ -886,12 +891,8 @@ function fanOut(p) {
 }
 function update() {
   const y = scrollY, vh = innerHeight, onHome = !home.hidden;
-  // Top bar hides on the way down, returns on the way up
+  // Top bar stays in place so the name is always visible
   bar.classList.toggle("scrolled", y > 8);
-  if (y < 120) bar.classList.remove("hide");
-  else if (y - lastY > 6) bar.classList.add("hide");
-  else if (lastY - y > 6) bar.classList.remove("hide");
-  if (y < 120 || Math.abs(y - lastY) > 6) lastY = y;
 
   if (!onHome) { brandName.style.opacity = 1; updateProject(vh); return; }
 
@@ -900,8 +901,8 @@ function update() {
     const p = clamp(y / 340, 0, 1);
     heroName.style.transform = `translateY(${(p * 40).toFixed(1)}px) scale(${(1 - 0.45 * p).toFixed(3)})`;
     heroName.style.opacity = (1 - p * 1.1).toFixed(3);
-    brandName.style.opacity = clamp((p - 0.55) / 0.45, 0, 1).toFixed(3);
-  } else brandName.style.opacity = 1;
+  }
+  brandName.style.opacity = 1;
 
   // Hero gallery tilts flat; its cards fan out from a stack
   if (!reduce) {
