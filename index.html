@@ -609,7 +609,7 @@ const P = {
     eyebrow: "Centre for Transformative Garment Production, Hong Kong · July to August 2024",
     title: "Robotic Garment-Handling Gripper",
     lede: "A two-finger robotic gripper for precise garment handling and detection, refined across four hardware revisions.",
-    hero: { img: "gr-v4bracket", alt: "Actuator with the 3D-printed V4 gripper mounting bracket" },
+    hero: { img: "gr-v4bracket", alt: "Actuator with the 3D-printed V4 gripper mounting bracket", small: true },
     meta: [["My role", "Research Intern"], ["When", "July to August 2024"], ["Where", "Hong Kong"], ["Tools", "SolidWorks, 3D printing"]],
     specs: [["4", "", "hardware prototypes"], ["40", "%", "size reduction by V4"], ["6+", "", "end-effector designs benchmarked"]],
     tour: { img: "gr-v1", alt: "Gripper prototypes", model: {
@@ -623,24 +623,24 @@ const P = {
         { match: "Base_Plate|Wall|L_plate|motor_holder|side_part|base_connect", color: "#2f2c30", roughness: 0.6, metalness: 0.1 },
         { match: ".", color: "#bfc4c9", roughness: 0.4, metalness: 0.5 } ],
       steps: [
-        { part: "^lead$", view: [30, 38], zoom: 0.7, focus: true },
-        { part: "^Ball_Screw", view: [60, 42], zoom: 0.6, focus: true },
-        { part: "FINGER", view: [80, 6], zoom: 1.05, focus: true },
-        { view: [-35, 18] } ] },
+        { part: "^20T-2GT", at: [0.5, 0.5, 0.5], view: [30, 38], zoom: 0.7, focus: true },
+        { part: "^Ball_Screw", at: [0.5, 0.5, 0.5], view: [60, 42], zoom: 0.6, focus: true },
+        { part: "FINGER", at: [0.5, 0.3, 0.5], view: [80, 6], zoom: 1.05, focus: true },
+        { part: "^Base_Plate$", at: [0.5, 0.2, 1], view: [-35, 18] } ] },
     steps: [
-      { img: "gr-v1", name: "V1 and V2", head: "Starting with lead screws",
+      { img: "gr-v1", tag: "Timing-belt pulley", name: "V1 and V2", head: "Starting with lead screws",
         body: "The first two prototypes used a lead-screw drive in white PLA, with the screw and timing-belt pulley exposed so I could see what the motion was doing." },
-      { img: "gr-screw", name: "V3", head: "Ball screws and a stiffer base",
+      { img: "gr-screw", tag: "Ball screw", name: "V3", head: "Ball screws and a stiffer base",
         body: "I replaced the lead screws with ball screws and re-measured the pulley spacing for smoother finger motion. In V3 I moved the base plate to a carbon-fiber-nylon composite, and used a shorter pulley instead of a motor-rod coupling to improve alignment without growing the base." },
-      { img: "gr-cadtop", name: "Perception", head: "Designing for the camera, not just the grasp",
+      { img: "gr-cadtop", tag: "Taller fingers", name: "Perception", head: "Designing for the camera, not just the grasp",
         body: "I moved the fingers upward and made them taller so the top-down detection camera could see them mid-grasp, balancing camera visibility against grasping the garment on the stage." },
-      { img: "gr-black", name: "V4", head: "Smaller, aligned and more accurate",
+      { img: "gr-black", tag: "V4 housing, 40% smaller", name: "V4", head: "Smaller, aligned and more accurate",
         body: "The final black V4 brought the size down 40% with better axis alignment and accuracy than the first prototypes." }
     ]},
     chapters: [
     ],
     videos: { title: "Grasping the garment", list: [["grip-1", "Grasp test"], ["grip-2", "Grasp test, second angle"]] },
-    gallery: [["gr-black", "The final V4 in black"], ["gr-v4open", "V4 with the casing opened"], ["gr-screw", "V3 ball screw"], ["gr-tilted", "Belt and pulley"], ["gr-formlabs", "Curing parts in a Formlabs printer"], ["gr-v1", "V1 and V2 prototypes"], ["gr-v1front", "V1/V2, front"]],
+    gallery: [["gr-black", "The final V4 in black"], ["gr-v4open", "V4 with the casing opened"], ["gr-tilted", "Belt and pulley"], ["gr-formlabs", "Curing parts in a Formlabs printer"], ["gr-v1", "V1 and V2 prototypes"], ["gr-v1front", "V1/V2, front"]],
     next: "first-robotics"
   },
   "first-robotics": {
@@ -717,7 +717,7 @@ function renderProject(slug) {
     const t = p.tour, imgs = [t.img, ...t.steps.map(s => s.img).filter(Boolean)].filter((v, i, a) => a.indexOf(v) === i);
     h += `<div class="tour"><h2 class="h2">Design breakdown</h2><div class="grid"><div class="stick"><div class="frame">`;
     h += imgs.map((im, i) => pic(im, "(max-width: 720px) 100vw, 720px", i === 0 ? t.alt : "", `data-ti="${im}"`, t.steps.some(s => s.tag && (s.img || t.img) === im), im === (t.steps[0].img || t.img) ? "on" : "")).join("");
-    h += t.steps.map((s, i) => s.tag ? `<div class="pt ${s.x > 60 ? "l" : "r"}${i === 0 ? " on" : ""}" data-pt="${i}" style="left:${s.x}%;top:${s.y}%"><span class="dot"></span><span class="lbl">${s.tag}</span></div>` : "").join("");
+    h += t.steps.map((s, i) => s.tag ? `<div class="pt ${s.x > 60 ? "l" : "r"}${s.x == null ? " only3d" : ""}${i === 0 ? " on" : ""}" data-pt="${i}"${s.x == null ? "" : ` style="left:${s.x}%;top:${s.y}%"`}><span class="dot"></span><span class="lbl">${s.tag}</span></div>` : "").join("");
     h += `</div></div><ol class="steps">${t.steps.map((s, i) => `<li data-step="${i}" data-img="${s.img || t.img}" class="${i === 0 ? "on" : ""}"><p class="kicker tn">0${i + 1} · ${s.name}</p><h3>${s.head}</h3><p class="b">${s.body}</p></li>`).join("")}</ol></div></div>`;
   }
   if (p.lift) {
