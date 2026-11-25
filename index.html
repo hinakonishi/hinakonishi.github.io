@@ -65,6 +65,7 @@ h1, h2, h3 { text-wrap: balance; }
 .nav nav a { color: var(--ink); }
 .nav nav a.pill { white-space: nowrap; background: var(--pink); color: var(--ink); font-weight: 600; padding: 8px 16px; border-radius: 999px; }
 .nav nav a.pill:hover { text-decoration: none; background: var(--pink-hover); }
+.menu-btn { display: none; }
 
 /* Home hero */
 .hero { padding-block: clamp(48px, 7vw, 96px) 48px; text-align: center; }
@@ -83,7 +84,11 @@ h1, h2, h3 { text-wrap: balance; }
 .fan a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 .fan .lbl { position: absolute; left: 10px; bottom: 10px; font-size: 13px; font-weight: 600; line-height: 1; color: var(--ink); background: var(--ring); padding: 6px 10px; border-radius: 999px; opacity: 0; transform: translateY(4px); transition: opacity 200ms, transform 200ms; }
 .fan a.pop .lbl { opacity: 1; transform: none; }
-@media (max-width: 640px) { .fan a:first-child, .fan a:last-child { display: none; } }
+@media (max-width: 640px) {
+  .fan { --w: 200px; height: auto; display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 12px var(--gutter) 28px; margin-inline: calc(var(--gutter) * -1); }
+  .fan::-webkit-scrollbar { display: none; }
+  .fan a { position: relative; top: auto; left: auto; flex: none; margin: 0; scroll-snap-align: center; transform: none !important; }
+}
 @media (hover: none) { .fan .lbl { opacity: 1; transform: none; } }
 .cap { margin: 16px 0 0; font-size: 14px; color: var(--muted); text-align: center; }
 
@@ -308,12 +313,36 @@ img.cad { object-fit: contain !important; }
 @media (max-width: 720px) {
   .tag { display: none; }
   .tag-list { display: block; }
-  .scard { position: relative; top: 0; }
-  .scard::after { display: none; }
+  /* Project cards stack on phones too; each sticks once it is fully on screen (top set by script) */
+  .scard { top: var(--m-top, calc(env(safe-area-inset-top, 0px) + var(--bar-h) + 12px)); min-height: 0; }
+  .scard .t { padding: 24px 22px; gap: 12px; }
+  .scard h3 { font-size: 30px; }
+  .scard .b { font-size: 16px; }
+  .scard .m { min-height: 190px; }
   .tour .stick { top: calc(env(safe-area-inset-top, 0px) + var(--bar-h)); padding-top: 8px; background: var(--bg); }
   .tour .frame { aspect-ratio: 4 / 3; max-height: 42vh; width: 100%; }
+  /* Photo tours keep the desktop square, so their labels land on the same spots */
+  .tour .frame:not(.t3d) { aspect-ratio: 1 / 1; width: min(100%, 46vh); max-height: none; margin-inline: auto; }
   .pt { display: none; }
+  .tour .frame:not(.t3d) .pt { display: block; }
+  /* on phones the label sits centered under its dot so it never runs off the photo */
+  .tour .frame:not(.t3d) .pt .lbl { font-size: 12px; padding: 4px 10px; white-space: normal; width: max-content; max-width: min(200px, 56vw); border-radius: 14px; line-height: 1.25; top: 16px; left: 0; right: auto; translate: -50% 0; text-align: center; }
   .steps li { min-height: 62vh; }
+  /* Key specs: two per row */
+  .specs dl { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 20px; }
+  .specs dt { font-size: clamp(38px, 11vw, 52px); }
+  .specs dd { font-size: 14px; }
+  /* Bigger touch areas for small text links, without changing how they look */
+  .more a, .press a, .links a, a.back, .foot a { position: relative; }
+  .more a::before, .press a::before, .links a::before, a.back::before, .foot a::before { content: ""; position: absolute; inset: -12px -8px; }
+  /* One-row top bar with a Menu button */
+  .nav { flex-wrap: nowrap; padding-block: 10px; }
+  .menu-btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); background: var(--tile); color: var(--ink); font: 600 15px var(--sans); cursor: pointer; }
+  .menu-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .nav nav { display: none; position: absolute; left: 0; right: 0; top: 100%; flex-direction: column; align-items: stretch; gap: 0; padding: 4px var(--gutter) 20px; background: var(--bg); border-top: 1px solid var(--line); box-shadow: 0 16px 24px -16px rgba(42, 29, 34, 0.3); font-size: 18px; }
+  .topbar.menu-open .nav nav { display: flex; }
+  .nav nav a { padding: 14px 2px; border-bottom: 1px solid var(--line); }
+  .nav nav a.pill { margin-top: 16px; padding: 14px; text-align: center; border-bottom: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; }
@@ -327,7 +356,8 @@ img.cad { object-fit: contain !important; }
     <a class="brand" href="#top" aria-label="Hinako Nishi, home">
       <span id="brandName">Hinako Nishi</span>
     </a>
-    <nav aria-label="Main">
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mainNav">Menu</button>
+    <nav aria-label="Main" id="mainNav">
       <a href="#work">Work</a>
       <a href="#about">About</a>
       <a href="assets/resume.pdf" target="_blank" rel="noopener">Resume</a>
@@ -738,7 +768,7 @@ function renderProject(slug) {
   h += `<section class="wrap"><a class="next${n.hero.img.startsWith("sc-") ? " light" : ""}" href="#${p.next}"><div class="t"><p>Next project</p><strong>${n.title} ›</strong></div><div class="m">${pic(n.hero.img, "(max-width: 720px) 100vw, 640px", n.hero.alt)}</div></a></section>`;
   proj.innerHTML = h;
   $$("img", proj).forEach(i => i.addEventListener("load", () => update(), { once: true }));
-  setupTour(); setupCounts();
+  setupTour(); setupCounts(); placeTags();
   if (p.tour && p.tour.model) mountTour3d(p.tour.model);
 }
 
@@ -761,6 +791,17 @@ function setupTour() {
   const steps = $$("[data-step]", proj);
   tour = steps.length ? { steps, heads: steps.map(s => s.querySelector("h3")), stick: $(".tour .stick", proj), pts: $$("[data-pt]", proj), imgs: $$("[data-ti]", proj), active: "0" } : null;
 }
+// On phones a photo tour's label sits under its dot; keep each one inside the photo
+function placeTags() {
+  $$(".tour .frame:not(.t3d) .pt", proj).forEach(pt => {
+    const l = pt.querySelector(".lbl");
+    if (innerWidth > 720) { l.style.left = l.style.translate = ""; return; }
+    const W = pt.parentElement.clientWidth, x = pt.offsetLeft, w = l.offsetWidth;
+    l.style.left = Math.max(8 - x, Math.min(W - 8 - x - w, -w / 2)).toFixed(0) + "px";
+    l.style.translate = "0 0";
+  });
+}
+addEventListener("resize", placeTags);
 function updateTour(vh) {
   if (!tour) return;
   // A step takes over once its heading passes 55% of the screen height, so the words and the picture change together.
@@ -810,7 +851,7 @@ function route() {
     proj.hidden = true; home.hidden = false; proj.innerHTML = "";
     document.title = "Hinako Nishi";
     const el = id && document.getElementById(id);
-    if (el) { const y = el.getBoundingClientRect().top + scrollY - (id === "top" ? 200 : 16); jump(Math.max(0, y), !wasProject); }
+    if (el) { const y = el.getBoundingClientRect().top + scrollY - (id === "top" ? 200 : document.getElementById("topbar").offsetHeight + 16); jump(Math.max(0, y), !wasProject); }
     else if (wasProject) jump(0);
   }
   update();
@@ -848,6 +889,15 @@ function jump(y, smooth) { if (glide) glide.stop(); if (smooth && glide) glide.t
 const bar = $("#topbar"), heroName = $("#heroName"), brandName = $("#brandName"), tilt = $("#tilt");
 const setBarH = () => document.documentElement.style.setProperty("--bar-h", bar.offsetHeight + "px");
 setBarH(); addEventListener("resize", setBarH); if (document.fonts) document.fonts.ready.then(setBarH);
+// Phone menu: the Menu button opens the links under the bar; any link, Escape or a page change closes it
+{
+  const btn = $(".menu-btn"), setMenu = open => { bar.classList.toggle("menu-open", open); btn.setAttribute("aria-expanded", String(open)); btn.textContent = open ? "Close" : "Menu"; };
+  btn.addEventListener("click", () => setMenu(!bar.classList.contains("menu-open")));
+  $$("#mainNav a").forEach(a => a.addEventListener("click", () => setMenu(false)));
+  addEventListener("keydown", e => { if (e.key === "Escape" && bar.classList.contains("menu-open")) { setMenu(false); btn.focus(); } });
+  addEventListener("hashchange", () => setMenu(false));
+  addEventListener("resize", () => { if (innerWidth > 720) setMenu(false); });
+}
 const intro = $("#intro"), introP = intro.querySelector("p"), cut = $("#cut"), cards = $$(".scard");
 let lastY = scrollY, words = [], litCount = -1;
 if (!reduce) {
@@ -863,6 +913,7 @@ function fanOut(p) {
   const fan = $("#fan");
   if (!fan) return;
   fanP = p;
+  if (innerWidth <= 640) { fan.classList.add("open"); return; }
   const e = 1 - Math.pow(1 - p, 2), open = e > 0.985;
   fan.classList.toggle("open", open);
   const cards = $$("a", fan).filter(c => c.offsetWidth), n = cards.length, mid = (n - 1) / 2;
@@ -929,7 +980,11 @@ function update() {
   }
 
   // Project cards stack, each one settling back as the next arrives
-  if (innerWidth > 720 && !reduce) cards.forEach((c, i) => {
+  if (innerWidth <= 720) cards.forEach((c, i) => {
+    const t = Math.min(bar.offsetHeight + 12 + i * 10, vh - c.offsetHeight - 12);
+    c.style.setProperty("--m-top", t.toFixed(0) + "px");
+  });
+  if (!reduce) cards.forEach((c, i) => {
     const nx = cards[i + 1];
     if (!nx) return;
     const stickTop = parseFloat(getComputedStyle(c).top) || 0;

@@ -19,3 +19,8 @@
   .tour .frame.t3d .pt .lbl { font-size: 12px; padding: 4px 10px; top: -14px; }
   .tour .frame.t3d .m3d-btns button { min-width: 40px; height: 40px; }
 }
+
+/* Phones: keep the "Drag to rotate" hint (it was hidden on small screens) */
+@media (max-width: 720px) {
+  .m3d-hint { display: inline; font-size: 13px; }
+}
