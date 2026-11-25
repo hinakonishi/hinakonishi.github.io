@@ -12,9 +12,12 @@
 <meta property="og:url" content="https://hinakonishi.github.io/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600&family=Pinyon+Script&display=swap">
 <link rel="stylesheet" href="3d/wing3d.css">
 <link rel="stylesheet" href="3d/tour3d.css">
 <style>
@@ -56,7 +59,7 @@ h1, h2, h3 { text-wrap: balance; }
 .nav { padding-block: 14px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
 .brand { display: flex; align-items: center; gap: 8px; color: var(--ink); }
 .brand:hover { text-decoration: none; }
-.brand span { font-family: var(--serif); font-size: 22px; letter-spacing: -0.01em; transition: opacity 200ms linear; }
+.brand span { font-family: "Pinyon Script", var(--serif); font-size: 28px; line-height: 1; letter-spacing: 0; color: var(--accent); padding-block: 4px; transition: opacity 200ms linear; }
 .nav nav { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 28px; font-size: 15px; font-weight: 500; }
 .nav nav a { color: var(--ink); }
 .nav nav a.pill { white-space: nowrap; background: var(--pink); color: var(--ink); font-weight: 600; padding: 8px 16px; border-radius: 999px; }
@@ -321,7 +324,6 @@ img.cad { object-fit: contain !important; }
 <header class="topbar" id="topbar">
   <div class="wrap nav">
     <a class="brand" href="#top" aria-label="Hinako Nishi, home">
-      <svg width="20" height="20" viewBox="-30 -30 60 60" aria-hidden="true"><g fill="#EC7098"><path d="M0,-4 C-8,-9 -12,-20 -6,-26 L0,-23 L6,-26 C12,-20 8,-9 0,-4Z"/><path transform="rotate(72)" d="M0,-4 C-8,-9 -12,-20 -6,-26 L0,-23 L6,-26 C12,-20 8,-9 0,-4Z"/><path transform="rotate(144)" d="M0,-4 C-8,-9 -12,-20 -6,-26 L0,-23 L6,-26 C12,-20 8,-9 0,-4Z"/><path transform="rotate(216)" d="M0,-4 C-8,-9 -12,-20 -6,-26 L0,-23 L6,-26 C12,-20 8,-9 0,-4Z"/><path transform="rotate(288)" d="M0,-4 C-8,-9 -12,-20 -6,-26 L0,-23 L6,-26 C12,-20 8,-9 0,-4Z"/></g></svg>
       <span id="brandName">Hinako Nishi</span>
     </a>
     <nav aria-label="Main">
