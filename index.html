@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hinako Nishi</title>
 <meta name="theme-color" content="#FEF8F9">
-<meta name="description" content="Portfolio of Hinako Nishi, a Mechanical Engineering student at the University of Michigan: the solar car dual wing system, an amphibious inspection hovercraft, an underwater ROV, a robotic garment-handling gripper, FIRST Robotics, and Beach Board Hong Kong.">
-<meta property="og:title" content="Hinako Nishi · Mechanical Engineer, Builder">
-<meta property="og:description" content="Hardware projects: a solar car wing system, an amphibious inspection hovercraft, an underwater ROV, a robotic gripper, FIRST Robotics, and Beach Board Hong Kong.">
+<meta name="description" content="Portfolio of Hinako Nishi, a Mechanical Engineering student at the University of Michigan: the solar car dual wing system, an amphibious inspection hovercraft, an underwater ROV, a robotic garment-handling gripper, and Beach Board Hong Kong.">
+<meta property="og:title" content="Hinako Nishi · Project Portfolio">
+<meta property="og:description" content="Mechanical Engineering, University of Michigan. Projects: a solar car wing system, an amphibious inspection hovercraft, an underwater ROV, a robotic gripper, and Beach Board Hong Kong.">
 <meta property="og:image" content="https://hinakonishi.github.io/og-image.jpg">
 <meta property="og:url" content="https://hinakonishi.github.io/">
 <meta property="og:type" content="website">
@@ -217,6 +217,7 @@ h1, h2, h3 { text-wrap: balance; }
 .contact .wrap { padding-block: clamp(88px, 10vw, 136px); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 32px; }
 .contact h2 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(52px, 8vw, 120px); line-height: 0.98; letter-spacing: -0.035em; }
 .contact h2 em { color: var(--pink-light); }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .contact p { margin: 0; max-width: 46ch; color: var(--on-char-muted); }
 .mailrow { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px 24px; }
 .mail { font-family: var(--serif); font-size: clamp(28px, 3.6vw, 44px); color: var(--on-char); user-select: all; text-decoration: underline; text-decoration-color: var(--pink-light); text-underline-offset: 8px; text-decoration-thickness: 2px; }
@@ -516,7 +517,7 @@ img.cad { object-fit: contain !important; }
 
 <section class="contact" id="contact" aria-labelledby="contact-h">
   <div class="wrap">
-    <h2 id="contact-h">Have a good problem?<br><em>Let’s build it.</em></h2>
+    <h2 id="contact-h" class="sr-only">Contact</h2>
     <p>Always happy to talk about hardware, projects or opportunities.</p>
     <div class="mailrow">
       <a class="mail" href="mailto:hinako@umich.edu">hinako@umich.edu</a>
