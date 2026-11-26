@@ -93,7 +93,8 @@ h1, h2, h3 { text-wrap: balance; }
 .cap { margin: 16px 0 0; font-size: 14px; color: var(--muted); text-align: center; }
 
 /* Intro: words fill in as you read */
-.intro { padding-block: 128px; }
+.intro { padding-block: 128px 56px; }
+.intro + .stack-sec { padding-top: 24px; }
 .intro p { margin: 0 auto; max-width: 34ch; font-family: var(--serif); font-size: clamp(26px, 3vw, 40px); line-height: 1.28; letter-spacing: -0.012em; text-align: center; }
 .intro.fill p .w { color: var(--unlit); transition: color 250ms linear; }
 .intro.fill p .w.lit { color: var(--ink); }
@@ -388,25 +389,21 @@ img.cad { object-fit: contain !important; }
     <div class="scards" id="scards">
       <a class="scard blush" href="#solar-car-wing" style="--i:0">
         <div class="t"><p class="kicker">Solar Car Dual Wing System · University of Michigan Solar Car Team</p><h3>A dual static-cambered wing system for a solar car.</h3><p class="b tn">A motorized elevator raises whichever wing suits the wind so it helps push the car forward. As Wing Mechanical Engineer, I designed the layout and the mechanism that raises each wing in 7 seconds.</p><span class="go">See the project ›</span></div>
-        <div class="m"><img class="cad" src="i/sc-p1.webp" decoding="async" alt="The full car with one wing raised"></div>
+        <div class="m"><img class="cad" src="i/sm/sc-card.webp" srcset="i/sm/sc-card.webp 396w, i/sc-card.webp 975w" sizes="(max-width: 720px) 60vw, 300px" decoding="async" alt="CAD render of the wing elevator with both wings stowed"></div>
       </a>
       <a class="scard dark" href="#hovercraft" style="--i:1">
         <div class="t"><p class="kicker">Amphibious Inspection Hovercraft · Japan Infra Waymark</p><h3>An amphibious hovercraft for bridge inspection.</h3><p class="b tn">It crosses grass, gravel, water and gentle slopes. I designed and built it over three prototypes, reaching 3.5 kg of lift at half throttle.</p><span class="go">See the project ›</span></div>
-        <div class="m"><img src="i/sm/hc-pool.webp" srcset="i/sm/hc-pool.webp 800w, i/hc-pool.webp 1042w" sizes="(max-width: 720px) 100vw, 520px" decoding="async" alt="Hovercraft with pink fan guards floating in a test pool" style="object-position: 58% 50%"></div>
+        <div class="m"><img class="cad" src="i/sm/hc-card.webp" srcset="i/sm/hc-card.webp 800w, i/hc-card.webp 1490w" sizes="(max-width: 720px) 100vw, 640px" decoding="async" alt="CAD render of the hovercraft"></div>
       </a>
       <a class="scard sand" href="#rov" style="--i:2">
         <div class="t"><p class="kicker">Underwater ROV · University of Michigan</p><h3>An underwater ROV for offshore wind inspection.</h3><p class="b tn">Testing Lead on a five-person team. The full build cost $256, and it finished the riser inspection in 14 of the 30 minutes allowed.</p><span class="go">See the project ›</span></div>
-        <div class="m"><img src="i/rov-close.webp" decoding="async" alt="The ROV in the test tank" style="object-position: 50% 45%"></div>
+        <div class="m"><img class="cad" src="i/sm/rov-cad.webp" srcset="i/sm/rov-cad.webp 800w, i/rov-cad.webp 1600w" sizes="(max-width: 720px) 100vw, 640px" decoding="async" alt="CAD render of the ROV"></div>
       </a>
       <a class="scard" href="#gripper" style="--i:3">
         <div class="t"><p class="kicker">Robotic gripper · TransGP</p><h3>Designed for the camera as much as the grasp.</h3><p class="b">Four hardware revisions of a two-finger gripper for garment handling, 40% smaller by the last one.</p><span class="go">See the project ›</span></div>
-        <div class="m"><img src="i/gr-v4open.webp" decoding="async" alt="V4 gripper with the casing opened"></div>
+        <div class="m"><img class="cad" src="i/sm/gr-card.webp" srcset="i/sm/gr-card.webp 800w, i/gr-card.webp 1410w" sizes="(max-width: 720px) 100vw, 640px" decoding="async" alt="CAD render of the gripper"></div>
       </a>
-      <a class="scard blush" href="#first-robotics" style="--i:4">
-        <div class="t"><p class="kicker">FIRST Robotics · Team 9421</p><h3>Drive Team Captain, FIRST Team 9421.</h3><p class="b">Led a 15-member engineering team from a six-week build to the 2024 FIRST World Championship.</p><span class="go">See the project ›</span></div>
-        <div class="m"><img src="i/sm/fr-jumbo.webp" srcset="i/sm/fr-jumbo.webp 800w, i/fr-jumbo.webp 1170w" sizes="(max-width: 720px) 100vw, 520px" decoding="async" alt="Drive team on the jumbotron during a qualification match" style="object-position: 55% 40%"></div>
-      </a>
-      <a class="scard dark" href="#beach-board" style="--i:5">
+      <a class="scard dark" href="#beach-board" style="--i:4">
         <div class="t"><p class="kicker">Beach Board Hong Kong · Founder</p><h3>An educational board game on Hong Kong’s beach pollution.</h3><p class="b">Built with A Plastic Ocean Foundation and sold at the M+ museum shop.</p><span class="go">See the project ›</span></div>
         <div class="m"><img src="i/sm/bb-blue.webp" srcset="i/sm/bb-blue.webp 800w, i/bb-blue.webp 886w" sizes="(max-width: 720px) 100vw, 520px" decoding="async" alt="Beach Board game styled on a blue background"></div>
       </a>
@@ -636,7 +633,7 @@ const P = {
     ],
     videos: { title: "Grasping the garment", list: [["grip-1", "Grasp test"], ["grip-2", "Grasp test, second angle"]] },
     gallery: [["gr-black", "The final V4 in black"], ["gr-v4open", "V4 with the casing opened"], ["gr-tilted", "Belt and pulley"], ["gr-formlabs", "Curing parts in a Formlabs printer"], ["gr-v1", "V1 and V2 prototypes"], ["gr-v1front", "V1/V2, front"]],
-    next: "first-robotics"
+    next: "beach-board"
   },
   "first-robotics": {
     eyebrow: "Drive Team Captain and Engineering Team · August 2023 to May 2025",
