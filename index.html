@@ -66,6 +66,8 @@ h1, h2, h3 { text-wrap: balance; }
 .nav nav a.pill { white-space: nowrap; background: var(--pink); color: var(--ink); font-weight: 600; padding: 8px 16px; border-radius: 999px; }
 .nav nav a.pill:hover { text-decoration: none; background: var(--pink-hover); }
 .menu-btn { display: none; }
+.nav-work { display: contents; }
+.work-sub { display: none; }
 
 /* Home hero */
 .hero { padding-block: clamp(48px, 7vw, 96px) 48px; text-align: center; }
@@ -347,6 +349,18 @@ img.cad { object-fit: contain !important; }
   .topbar.menu-open .nav nav { display: flex; }
   .nav nav a { padding: 14px 2px; border-bottom: 1px solid var(--line); }
   .nav nav a.pill { margin-top: 16px; padding: 14px; text-align: center; border-bottom: 0; }
+  /* Work opens a list of projects */
+  .nav-work { display: block; border-bottom: 1px solid var(--line); }
+  .nav nav .work-link { display: flex; justify-content: space-between; align-items: center; border-bottom: 0; }
+  .work-link::after { content: ""; width: 9px; height: 9px; margin-right: 6px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: translateY(-3px) rotate(45deg); transition: transform 250ms var(--ease); }
+  .nav-work.open .work-link::after { transform: translateY(2px) rotate(-135deg); }
+  .work-sub { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 300ms var(--ease); }
+  .work-sub > * { min-height: 0; }
+  .nav-work.open .work-sub { grid-template-rows: 1fr; }
+  .work-sub-in { overflow: hidden; display: flex; flex-direction: column; }
+  .nav nav .work-sub a { padding: 10px 2px 10px 16px; border-bottom: 0; font-size: 16px; color: var(--ink-2); }
+  .nav nav .work-sub a:last-child { margin-bottom: 10px; }
+  .nav nav .work-sub a.all { color: var(--accent); font-weight: 600; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; }
@@ -362,7 +376,17 @@ img.cad { object-fit: contain !important; }
     </a>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mainNav">Menu</button>
     <nav aria-label="Main" id="mainNav">
-      <a href="#work">Work</a>
+      <div class="nav-work">
+        <a href="#work" class="work-link" aria-controls="workSub">Work</a>
+        <div class="work-sub" id="workSub"><div class="work-sub-in">
+          <a href="#solar-car-wing">Solar car wing</a>
+          <a href="#hovercraft">Hovercraft</a>
+          <a href="#rov">Underwater ROV</a>
+          <a href="#gripper">Garment gripper</a>
+          <a href="#beach-board">Beach Board</a>
+          <a href="#work" class="all">All projects</a>
+        </div></div>
+      </div>
       <a href="#about">About</a>
       <a href="assets/resume.pdf" target="_blank" rel="noopener">Resume</a>
       <a class="pill" href="#contact">Email me</a>
@@ -873,7 +897,12 @@ setBarH(); addEventListener("resize", setBarH); if (document.fonts) document.fon
 {
   const btn = $(".menu-btn"), setMenu = open => { bar.classList.toggle("menu-open", open); btn.setAttribute("aria-expanded", String(open)); btn.textContent = open ? "Close" : "Menu"; };
   btn.addEventListener("click", () => setMenu(!bar.classList.contains("menu-open")));
-  $$("#mainNav a").forEach(a => a.addEventListener("click", () => setMenu(false)));
+  const workBox = $(".nav-work"), workLink = $(".work-link"), phoneMenu = matchMedia("(max-width: 720px)");
+  const setWork = open => { workBox.classList.toggle("open", open); workLink.setAttribute("aria-expanded", String(open)); $$("#workSub a").forEach(a => a.tabIndex = open ? 0 : -1); };
+  setWork(false);
+  btn.addEventListener("click", () => { if (!bar.classList.contains("menu-open")) setWork(false); });
+  workLink.addEventListener("click", e => { if (!phoneMenu.matches) return; e.preventDefault(); e.stopImmediatePropagation(); setWork(!workBox.classList.contains("open")); });
+  $$("#mainNav a").forEach(a => a.addEventListener("click", () => { if (a === workLink && phoneMenu.matches) return; setMenu(false); setWork(false); }));
   addEventListener("keydown", e => { if (e.key === "Escape" && bar.classList.contains("menu-open")) { setMenu(false); btn.focus(); } });
   addEventListener("hashchange", () => setMenu(false));
   addEventListener("resize", () => { if (innerWidth > 720) setMenu(false); });
