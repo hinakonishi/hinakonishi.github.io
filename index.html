@@ -105,7 +105,7 @@ h1, h2, h3 { text-wrap: balance; }
 .hero { padding-block: clamp(48px, 7vw, 96px) 48px; text-align: center; }
 .hero .sub { margin: 0; font-size: 16px; color: var(--muted); }
 .hero h1 { margin: 16px 0 0; font-family: var(--serif); font-weight: 400; font-size: clamp(56px, 9.5vw, 144px); line-height: 0.95; letter-spacing: -0.035em; transform-origin: 50% 0; will-change: transform, opacity; }
-.hero .line { margin: 24px auto 0; max-width: 26ch; font-family: var(--serif); font-size: clamp(24px, 2.6vw, 36px); line-height: 1.2; letter-spacing: -0.01em; color: var(--muted); }
+.hero .line { margin: 24px auto 0; max-width: 34ch; font-family: var(--serif); font-size: clamp(24px, 2.6vw, 36px); line-height: 1.2; letter-spacing: -0.01em; color: var(--muted); }
 .tilt-wrap { perspective: 1400px; }
 .tilt { transform-origin: 50% 0; will-change: transform; }
 /* Hero CAD fan: cards spread out from a stack as you scroll */
@@ -132,6 +132,9 @@ h1, h2, h3 { text-wrap: balance; }
 .intro { padding-block: 16px 56px; }
 @media (max-width: 640px) { .intro { padding-top: 52px; } }
 .intro + .stack-sec { padding-top: 24px; }
+/* Projects follows the CAD cards directly: 80px from the cards to the heading */
+.wrap-wide + .stack-sec { padding-top: 16px; }
+@media (max-width: 640px) { .wrap-wide + .stack-sec { padding-top: 52px; } }
 .intro p { margin: 0 auto; max-width: 34ch; font-family: var(--serif); font-size: clamp(26px, 3vw, 40px); line-height: 1.28; letter-spacing: -0.012em; text-align: center; }
 .intro.fill p .w { color: var(--unlit); transition: color 250ms linear; }
 .intro.fill p .w.lit { color: var(--ink); }
@@ -452,17 +455,13 @@ img.cad { object-fit: contain !important; }
   <section class="wrap hero" id="top">
     <p class="sub">Mechanical Engineering, University of Michigan</p>
     <h1 id="heroName">Hinako Nishi</h1>
-    <p class="line">Mechanical engineering student focused on product design, from first sketch to working hardware.</p>
+    <p class="line">I take hardware from first sketch to tested prototype, with a focus on product design, robotics and drones.</p>
   </section>
 
   <section class="wrap-wide">
     <div class="tilt-wrap"><div class="tilt" id="tilt">
     <div class="fan" id="fan" aria-label="CAD from my projects"><a href="#solar-car-wing" class="tall"><img src="i/sm/cx-sc-p8.webp" srcset="i/sm/cx-sc-p8.webp 640w, i/cx-sc-p8.webp 1200w" sizes="(max-width: 720px) 40vw, 260px" alt="Both solar car wings in the elevator, CAD" decoding="async"><span class="lbl">Solar car wing</span></a><a href="#hovercraft"><img src="i/sm/cx-hc-cad.webp" srcset="i/sm/cx-hc-cad.webp 640w, i/cx-hc-cad.webp 1200w" sizes="(max-width: 720px) 40vw, 260px" alt="Hovercraft assembly, CAD" decoding="async"><span class="lbl">Hovercraft</span></a><a href="#gripper"><img src="i/sm/cx-gr-iso.webp" srcset="i/sm/cx-gr-iso.webp 640w, i/cx-gr-iso.webp 1200w" sizes="(max-width: 720px) 40vw, 260px" alt="Gripper assembly, isometric CAD" decoding="async"><span class="lbl">Garment gripper</span></a><a href="#solar-car-wing" class="tall"><img src="i/sm/cx-sc-p15.webp" srcset="i/sm/cx-sc-p15.webp 640w, i/cx-sc-p15.webp 1200w" sizes="(max-width: 720px) 40vw, 260px" alt="Full wing assembly with one wing raised, CAD" decoding="async"><span class="lbl">Solar car wing</span></a><a href="#rov"><img src="i/sm/cx-rov-mount.webp" srcset="i/sm/cx-rov-mount.webp 640w, i/cx-rov-mount.webp 1200w" sizes="(max-width: 720px) 40vw, 260px" alt="ROV frame with the rotating payload mount, CAD" decoding="async"><span class="lbl">Underwater ROV</span></a><a href="#gripper"><img src="i/sm/cx-gr-cadfull.webp" srcset="i/sm/cx-gr-cadfull.webp 640w, i/cx-gr-cadfull.webp 1200w" sizes="(max-width: 720px) 40vw, 260px" alt="Full gripper assembly, CAD" decoding="async"><span class="lbl">Garment gripper</span></a><a href="#solar-car-wing"><img src="i/sm/cx-sc-p4.webp" srcset="i/sm/cx-sc-p4.webp 640w, i/cx-sc-p4.webp 1200w" sizes="(max-width: 720px) 40vw, 260px" alt="Lower wing assembly with motors and pulleys, CAD" decoding="async"><span class="lbl">Solar car wing</span></a></div>
     </div></div>
-  </section>
-
-  <section class="wrap intro" id="intro">
-    <p>I study Mechanical Engineering at the University of Michigan, with a minor in Mathematics, and I’m a Mechanical Engineer on the University of Michigan Solar Car Team. My work runs from first concept to tested prototype, and I’m drawn to product design, robotics and drones.</p>
   </section>
 
   <section class="wrap stack-sec" id="work" aria-labelledby="more-h">
@@ -984,9 +983,9 @@ setBarH(); addEventListener("resize", setBarH); if (document.fonts) document.fon
   addEventListener("hashchange", () => { setMenu(false); setProj(false); });
   addEventListener("resize", () => { if (innerWidth > 720) setMenu(false); else setProj(false); });
 }
-const intro = $("#intro"), introP = intro.querySelector("p"), cut = $("#cut"), cards = $$(".scard");
+const intro = $("#intro"), introP = intro && intro.querySelector("p"), cut = $("#cut"), cards = $$(".scard");
 let lastY = scrollY, words = [], litCount = -1;
-if (!reduce) {
+if (!reduce && introP) {
   introP.innerHTML = introP.textContent.split(" ").map(w => `<span class="w">${w}</span>`).join(" ");
   words = $$(".w", introP); intro.classList.add("fill");
 }
