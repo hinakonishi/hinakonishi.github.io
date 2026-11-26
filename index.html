@@ -1026,29 +1026,41 @@ function fanOut(p) {
     fan.addEventListener("focusout", () => set(-1));
   }
 }
-// Phones: the CAD row glides sideways in an endless loop. A copy of the cards (hidden from screen readers)
-// follows the originals so the loop has no seam. Swiping the row sideways stops it for a moment; scrolling the page does not.
+// Phones: the CAD row glides sideways in an endless loop. Two copies of the cards (hidden from screen readers)
+// sit after the originals, and the row is kept in the middle copy, so it never reaches an end, whether it
+// glides by itself or is swiped either way. Swiping the row sideways stops it for a moment; scrolling the page does not.
 {
   const fan = $("#fan");
-  if (fan && !reduce) {
-    [...fan.children].forEach(a => { const c = a.cloneNode(true); c.classList.add("fan-clone"); c.setAttribute("aria-hidden", "true"); c.tabIndex = -1; c.removeAttribute("id"); fan.appendChild(c); });
+  if (fan) {
+    const originals = [...fan.children];
+    for (let k = 0; k < 2; k++) originals.forEach(a => { const c = a.cloneNode(true); c.classList.add("fan-clone"); c.setAttribute("aria-hidden", "true"); c.tabIndex = -1; c.removeAttribute("id"); fan.appendChild(c); });
+    const loopW = () => fan.querySelector(".fan-clone").offsetLeft - fan.children[0].offsetLeft;
     const SPEED = 28; // px per second
-    let x = 0, last = 0, holdUntil = 0, onScreen = true, ours = false;
+    let x = -1, last = 0, holdUntil = 0, onScreen = true, ours = false;
+    // Keep the position within the middle copy; the jump is invisible because every copy looks the same
+    const wrap = v => { const L = loopW(); if (L <= 0) return v; while (v < L * 0.5) v += L; while (v >= L * 1.5) v -= L; return v; };
+    const place = v => { x = wrap(v); ours = true; fan.scrollLeft = x; };
     new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; }).observe(fan);
     const hold = () => { holdUntil = performance.now() + 2500; };
-    // Only a sideways swipe on the row pauses it; scrolling the page up and down never does
     let sx = 0, sy = 0;
     fan.addEventListener("touchstart", e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
     fan.addEventListener("touchmove", e => { const dx = Math.abs(e.touches[0].clientX - sx), dy = Math.abs(e.touches[0].clientY - sy); if (dx > 8 && dx > dy) hold(); }, { passive: true });
     fan.addEventListener("wheel", e => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) hold(); }, { passive: true });
-    fan.addEventListener("scroll", () => { if (!ours) { hold(); x = fan.scrollLeft; } ours = false; }, { passive: true });
+    let wrapT;
+    fan.addEventListener("scroll", () => {
+      if (ours) { ours = false; return; }
+      hold(); x = fan.scrollLeft;
+      // A swipe that runs into the outer copies is moved back to the middle one as soon as it settles
+      clearTimeout(wrapT);
+      const L = loopW();
+      if (x < L * 0.25 || x > L * 1.75) place(x);
+      else wrapT = setTimeout(() => place(fan.scrollLeft), 120);
+    }, { passive: true });
     const tick = now => {
       const dt = Math.min(0.05, (now - last) / 1000 || 0); last = now;
-      if (innerWidth <= 640 && onScreen && now > holdUntil && !document.hidden) {
-        const loop = fan.querySelector(".fan-clone").offsetLeft - fan.children[0].offsetLeft;
-        x += SPEED * dt;
-        if (x >= loop) x -= loop;
-        ours = true; fan.scrollLeft = x;
+      if (innerWidth <= 640) {
+        if (x < 0) place(loopW());
+        else if (!reduce && onScreen && now > holdUntil && !document.hidden) place(x + SPEED * dt);
       }
       requestAnimationFrame(tick);
     };
