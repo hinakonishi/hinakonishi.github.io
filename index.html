@@ -1027,7 +1027,7 @@ function fanOut(p) {
   }
 }
 // Phones: the CAD row glides sideways in an endless loop. A copy of the cards (hidden from screen readers)
-// follows the originals so the loop has no seam. Touching or swiping stops it for a moment.
+// follows the originals so the loop has no seam. Swiping the row sideways stops it for a moment; scrolling the page does not.
 {
   const fan = $("#fan");
   if (fan && !reduce) {
@@ -1036,7 +1036,11 @@ function fanOut(p) {
     let x = 0, last = 0, holdUntil = 0, onScreen = true, ours = false;
     new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; }).observe(fan);
     const hold = () => { holdUntil = performance.now() + 2500; };
-    ["pointerdown", "touchstart", "wheel"].forEach(t => fan.addEventListener(t, hold, { passive: true }));
+    // Only a sideways swipe on the row pauses it; scrolling the page up and down never does
+    let sx = 0, sy = 0;
+    fan.addEventListener("touchstart", e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+    fan.addEventListener("touchmove", e => { const dx = Math.abs(e.touches[0].clientX - sx), dy = Math.abs(e.touches[0].clientY - sy); if (dx > 8 && dx > dy) hold(); }, { passive: true });
+    fan.addEventListener("wheel", e => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) hold(); }, { passive: true });
     fan.addEventListener("scroll", () => { if (!ours) { hold(); x = fan.scrollLeft; } ours = false; }, { passive: true });
     const tick = now => {
       const dt = Math.min(0.05, (now - last) / 1000 || 0); last = now;
