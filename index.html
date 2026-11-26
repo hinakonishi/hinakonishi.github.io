@@ -1155,6 +1155,30 @@ document.addEventListener("touchstart", e => { const a = e.target.closest && e.t
 addEventListener("load", () => { const go = () => Object.keys(P).forEach((k, i) => setTimeout(() => warm(k), i * 400)); if (window.requestIdleCallback) requestIdleCallback(go, { timeout: 2000 }); else setTimeout(go, 800); });
 
 route();
+
+/* Laptop, first visit at the top of the homepage: the page glides down a little so the CAD fan opens. Any wheel, touch, click or key stops it. */
+{
+  const id = decodeURIComponent(location.hash.slice(1));
+  if (!reduce && innerWidth > 720 && !P[id] && (!id || id === "top") && scrollY < 2) {
+    const evs = ["wheel", "touchstart", "pointerdown", "keydown"];
+    let raf = 0, stopped = false;
+    const stop = () => { stopped = true; cancelAnimationFrame(raf); evs.forEach(t => removeEventListener(t, stop, { capture: true })); };
+    evs.forEach(t => addEventListener(t, stop, { capture: true, passive: true }));
+    setTimeout(() => {
+      if (stopped || scrollY > 2) return stop();
+      const to = Math.round(innerHeight * 0.32), dur = 2600, ease = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      let t0 = 0;
+      const step = now => {
+        if (stopped) return;
+        if (!t0) t0 = now;
+        const k = Math.min(1, (now - t0) / dur);
+        scrollTo(0, to * ease(k));
+        if (k < 1) raf = requestAnimationFrame(step); else stop();
+      };
+      raf = requestAnimationFrame(step);
+    }, 900);
+  }
+}
 </script>
 <!-- 3D wing model for the homepage feature (#cut). All model-specific settings are in this JSON; the code is in 3d/wing3d.js.
      Leave "enabled": false until models/wing.glb exists. With it off, or if anything fails, the static image and tags show as before. -->
